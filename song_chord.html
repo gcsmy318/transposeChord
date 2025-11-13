@@ -1,0 +1,169 @@
+		<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Song + Chords (Local HTML)</title>
+<style>
+    body { font-family: system-ui, Arial; max-width:900px; margin:30px auto; }
+    textarea { width:100%; height:200px; }
+    pre { white-space:pre-wrap; background:#f6f6f6; padding:12px; border-radius:6px; }
+    .box { background:#f0f0f0; padding:15px; border-radius:8px; margin-bottom:25px; }
+</style>
+</head>
+<body>
+
+<h1>🎵 Song + Chord Manager</h1>
+
+<div class="box">
+    <h2>➕ เพิ่มเพลงใหม่</h2>
+    <input id="title" placeholder="ชื่อเพลง" style="width:100%; margin-bottom:8px"><br>
+    <textarea id="content" placeholder="บรรทัดคี่ = เนื้อเพลง, บรรทัดคู่ = คอร์ด"></textarea><br>
+    <button id="save">บันทึก</button>
+</div>
+
+<div class="box">
+    <h2>📚 เลือกเพลง</h2>
+    <select id="songList"></select>
+</div>
+
+<div class="box">
+    <h2>🔧 Transpose</h2>
+    <label>Transpose (semitones):</label>
+    <input id="semitones" type="number" value="0" style="width:80px">
+    <button id="apply">แสดงผล</button>
+</div>
+
+<h2>🎼 เนื้อเพลงพร้อมคอร์ด</h2>
+<pre id="display"></pre>
+
+<h2>🎸 คอร์ดทั้งหมดในเพลง</h2>
+<div id="chords"></div>
+
+<script>
+/* -------------------------
+   LocalStorage Manager
+------------------------- */
+function getSongs() {
+    return JSON.parse(localStorage.getItem("songs") || "[]");
+}
+function saveSongs(songs) {
+    localStorage.setItem("songs", JSON.stringify(songs));
+}
+
+/* -------------------------
+   Regex จับคอร์ดพื้นฐาน
+------------------------- */
+const chordRegex = /([A-G][#b]?)([^ \n]*)/g;
+
+/* -------------------------
+   Transpose Utilities
+------------------------- */
+const NOTES = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+const NOTE_INDEX = {};
+NOTES.forEach((n,i)=>NOTE_INDEX[n]=i);
+// flat map
+NOTE_INDEX["Db"]=NOTE_INDEX["C#"];
+NOTE_INDEX["Eb"]=NOTE_INDEX["D#"];
+NOTE_INDEX["Gb"]=NOTE_INDEX["F#"];
+NOTE_INDEX["Ab"]=NOTE_INDEX["G#"];
+NOTE_INDEX["Bb"]=NOTE_INDEX["A#"];
+
+function transposeChordToken(token, semitone) {
+    const m = token.match(/^([A-G][#b]?)(.*)$/);
+    if (!m) return token;
+    let root = m[1];
+    let tail = m[2] || "";
+    let idx = NOTE_INDEX[root];
+    if (idx === undefined) return token;
+    let newIndex = (idx + semitone) % 12;
+    if (newIndex < 0) newIndex += 12;
+    return NOTES[newIndex] + tail;
+}
+
+function transposeLine(line, semitone) {
+    return line.replace(chordRegex, (full, root, tail) => {
+        return transposeChordToken(full, semitone);
+    });
+}
+
+function transposeContent(text, semitone) {
+    let lines = text.split("\n");
+    return lines.map((line, i) => {
+        return (i % 2 === 1) ? transposeLine(line, semitone) : line;
+    }).join("\n");
+}
+
+/* -------------------------
+   Extract Chords
+------------------------- */
+function extractChords(text) {
+    let lines = text.split("\n");
+    let set = new Set();
+    lines.forEach((line, i) => {
+        if (i % 2 === 1) {  // บรรทัดคู่ = คอร์ด
+            let m;
+            while ((m = chordRegex.exec(line)) !== null) {
+                set.add(m[0]);
+            }
+        }
+    });
+    return Array.from(set);
+}
+
+/* -------------------------
+   UI Functions
+------------------------- */
+function refreshSongList() {
+    const list = getSongs();
+    const sel = document.getElementById("songList");
+    sel.innerHTML = "";
+    list.forEach(s => {
+        const opt = document.createElement("option");
+        opt.value = s.id;
+        opt.innerText = s.title;
+        sel.appendChild(opt);
+    });
+}
+
+document.getElementById("save").onclick = () => {
+    let title = document.getElementById("title").value.trim();
+    let content = document.getElementById("content").value;
+
+    if (!title || !content) {
+        alert("กรุณากรอกชื่อเพลงและเนื้อเพลง");
+        return;
+    }
+
+    let songs = getSongs();
+    let id = Date.now();
+    songs.push({ id, title, content });
+    saveSongs(songs);
+
+    document.getElementById("title").value = "";
+    document.getElementById("content").value = "";
+    refreshSongList();
+};
+
+document.getElementById("apply").onclick = () => {
+    const id = Number(document.getElementById("songList").value);
+    if (!id) return;
+
+    let songs = getSongs();
+    let song = songs.find(s => s.id === id);
+
+    let sem = parseInt(document.getElementById("semitones").value) || 0;
+
+    // แสดงผล transpose
+    let text = transposeContent(song.content, sem);
+    document.getElementById("display").textContent = text;
+
+    // แสดงคอร์ดที่มี
+    document.getElementById("chords").textContent = extractChords(text).join(", ");
+};
+
+// เริ่มโหลด
+refreshSongList();
+</script>
+
+</body>
+</html>
