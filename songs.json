@@ -1,0 +1,22 @@
+{
+  "songs": [
+    {
+      "id": "song1",
+      "title": "ความรักพระเจ้า",
+      "lyrics": "C G Am F\nความรักพระเจ้านั้นยิ่งใหญ่\n...\n",
+      "youtube": "https://youtu.be/xxxxxxx"
+    },
+    {
+      "id": "song2",
+      "title": "นำข้าไป",
+      "lyrics": "D A Bm G\nนำข้าไป ยังที่ลึก\n...\n",
+      "youtube": ""
+    },
+    {
+      "id": "song3",
+      "title": "สรรเสริญองค์พระผู้เป็นเจ้า",
+      "lyrics": "G D Em C\nสรรเสริญองค์พระผู้เป็นเจ้า\n...\n",
+      "youtube": "https://youtu.be/yyyyyyy"
+    }
+  ]
+}

@@ -3,136 +3,318 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Transpose Chord — Lyrics & Chords (Select song from list)</title>
+<title>Smye worship - Transpose Chord (Mobile A)</title>
 
-<!-- Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=JetBrains+Mono:wght@300;400;600;700&display=swap" rel="stylesheet">
+<!-- html2pdf / jspdf / html2canvas -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
-  :root{
-    --bg:#071124;
-    --card:#081428;
-    --muted:#9aa6b2;
-    --accent:#7dd3fc;
-    --radius:12px;
-    --gap:16px;
-    --text:#e6eef6;
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0;
-    font-family:"Sarabun", "Noto Sans Thai", sans-serif;
-    background:linear-gradient(180deg,#071124 0%,#05101a 100%);
-    color:#e6eef6;
-  }
-  .topbar{max-width:1200px;margin:18px auto;padding:10px 18px;display:flex;gap:12px;align-items:center}
-  h1{margin:0;font-size:18px}
-  .container{max-width:1200px;margin:0 auto;padding:12px;display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
-  .card{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:0 8px 28px rgba(0,0,0,0.45)}
-  textarea#editor{
-    width:100%;height:420px;padding:14px;border-radius:8px;border:1px solid rgba(255,255,255,0.25);
-    background: rgba(255,255,255,0.12); color:#e9f1f8;
-    font-family:"JetBrains Mono","Sarabun", monospace; font-size:15px; line-height:1.6; white-space:pre-wrap; resize:vertical;
-  }
-  .output{
-    white-space:pre-wrap; font-family:"JetBrains Mono","Sarabun",monospace; font-size:15px; line-height:1.6; color:#e9f1f8;
-    padding:12px;border-radius:8px;min-height:420px;border:1px solid rgba(255,255,255,0.25);background: rgba(255,255,255,0.06);overflow:auto;
-  }
-  .controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
-  .btn{padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:700;background:var(--accent);color:#022}
-  .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.08);color:#cfefff;font-weight:600}
-  .small{color:#9fb4c6;font-size:13px}
-  .row{display:flex;gap:8px;align-items:center}
-  .key-buttons{display:flex;gap:6px;flex-wrap:wrap}
-  .key-buttons button{padding:6px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
-  input[type="text"], input[type="search"]{padding:8px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
-  #searchResults{margin-top:10px;display:flex;flex-direction:column;gap:8px;max-height:360px;overflow:auto}
-  .sr-row{display:flex;gap:10px;padding:8px;border-radius:10px;align-items:flex-start;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.01)}
-  .sr-row img{border-radius:6px;object-fit:cover}
-  .muted{color:#9fb4c6;font-size:13px}
-  .label{font-size:12px;color:#9fb4c6}
-  a.preview-link{color:var(--accent); text-decoration:underline}
-  .chordpro{color:#7fe3a8}
-  /* Modal (list picker) */
-  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:9999}
-  .modal{background:#fff;color:#000;border-radius:10px;max-width:900px;width:95%;max-height:80vh;overflow:auto;padding:18px}
-  .modal h3{margin:0 0 8px 0}
-  .song-row{display:flex;justify-content:space-between;align-items:center;padding:8px;border-bottom:1px solid #eee}
-  .song-left{flex:1}
-  .song-title{font-weight:700}
-  .song-meta{color:#666;font-size:13px}
-  .song-actions{margin-left:12px}
-  .score-badge{background:#0077cc;color:#fff;padding:6px 8px;border-radius:6px;font-weight:700}
-  @media(max-width:980px){.container{grid-template-columns:1fr;padding:12px}textarea#editor{height:340px}.output{min-height:340px}}
+
+/* ===========================
+   FONT: THSarabunNew
+   =========================== */
+@font-face {
+  font-family: 'THSarabunNew';
+  font-weight: 400;
+  font-style: normal;
+  src: url('THSarabunNew.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'THSarabunNew';
+  font-weight: 700;
+  font-style: normal;
+  src: url('THSarabunNew-Bold.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'THSarabunNew';
+  font-weight: 400;
+  font-style: italic;
+  src: url('THSarabunNew-Italic.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'THSarabunNew';
+  font-weight: 700;
+  font-style: italic;
+  src: url('THSarabunNew-BoldItalic.woff2') format('woff2');
+}
+
+/* apply everywhere */
+body, input, button, textarea, select, .output, .chordpro {
+  font-family:"THSarabunNew", sans-serif !important;
+}
+
+/* ===========================
+   THEME + LAYOUT
+   =========================== */
+:root{
+  --bg:#f5f7fa;
+  --card:#ffffff;
+  --border:#e6eef6;
+  --muted:#6b7280;
+  --accent:#0ea5e9;
+  --accent-dark:#0284c7;
+  --radius:10px;
+  --text:#0f172a;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-size:16px;
+  line-height:1.45;
+}
+
+.topbar{
+  max-width:1200px;
+  margin:12px auto;
+  padding:10px 14px;
+  background:#fff;
+  border-radius:10px;
+  border:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+h1{margin:0;font-size:20px;font-weight:700}
+
+.container{
+  max-width:1200px;
+  margin:12px auto;
+  padding:12px;
+  display:grid;
+  grid-template-columns:280px 1fr 1fr;
+  gap:14px;
+}
+
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:14px;
+  border:1px solid var(--border);
+  box-shadow:0 6px 18px rgba(12,18,32,0.04);
+}
+
+/* sidebar list */
+.sidebar-list-item{
+  display:flex;
+  gap:10px;
+  padding:10px;
+  border-bottom:1px solid var(--border);
+  align-items:flex-start;
+}
+.sidebar-list-item input{ margin-top:6px }
+.title{ font-weight:700; color:#0f172a }
+.youtube{ font-size:13px; color:#475569; margin-top:4px }
+.actions{ display:flex; flex-direction:column; gap:8px }
+.small{ font-size:14px; color:var(--muted) }
+
+/* EDITOR + PREVIEW */
+textarea#editor{
+  width:100%;
+  height:420px;
+  padding:12px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:#fff;
+  resize:vertical;
+  font-family:"THSarabunNew", sans-serif !important;
+  font-size:16px;
+  line-height:1.55;
+}
+
+.output{
+  min-height:420px;
+  padding:12px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:#fff;
+  overflow:auto;
+  white-space:pre-wrap;
+  font-family:"THSarabunNew", sans-serif !important;
+  font-size:16px;
+  line-height:1.55;
+}
+
+.chordpro{
+  font-family:"THSarabunNew", sans-serif !important;
+  font-size:16px;
+  font-weight:700;
+  color:var(--accent-dark);
+}
+
+.controls{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  align-items:center;
+  margin-top:10px;
+}
+
+.btn{
+  padding:8px 12px;
+  border-radius:8px;
+  border:none;
+  background:var(--accent);
+  color:#fff;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.btn.secondary{
+  background:#f3f4f6;
+  color:var(--text);
+  border:1px solid var(--border);
+}
+
+.key-buttons button{
+  padding:6px 10px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:#f8fafc;
+}
+
+/* PDF list */
+.pdf-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:8px;
+  border-bottom:1px solid var(--border);
+}
+.pdf-item .meta{ font-size:13px; color:#374151 }
+
+/* responsive */
+@media(max-width:980px){
+  .container{grid-template-columns:1fr; padding:8px}
+  .topbar{margin:8px;padding:8px}
+}
+
+/* MOBILE TABS */
+.mobile-tabs{
+  display:none;
+  gap:8px;
+  padding:8px;
+  justify-content:center;
+  background:#fff;
+  border-bottom:1px solid var(--border);
+}
+
+@media(max-width:768px){
+  .mobile-tabs{display:flex; position:sticky; top:0; z-index:20}
+  #songListSection, #editorSection, #previewSection { display:none; }
+  #songListSection.show, #editorSection.show, #previewSection.show { display:block; }
+  #editorSection, #previewSection, #songListSection { min-height:60vh; }
+}
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <h1>Transpose Chord — เลือกเพลงจากหน้า list</h1>
-  <div style="margin-left:auto;display:flex;gap:10px;align-items:center">
-    <button id="presentMode" class="btn secondary">Presentation</button>
-  </div>
+  <h1>Smye worship - Transpose Chord</h1>
+</div>
+
+<div class="mobile-tabs" id="mobileTabs">
+  <button id="tabList" class="btn secondary">📚 คลังเพลง</button>
+  <button id="tabEditor" class="btn secondary">🎵 Editor</button>
+  <button id="tabPreview" class="btn secondary">📄 Preview</button>
 </div>
 
 <div class="container">
-  <!-- LEFT -->
-  <section class="card">
+<!-- (Part 2 จะเริ่มตรงนี้) -->
+  <!-- ============================
+       SONG LIST (SIDEBAR)
+  ============================ -->
+  <section id="songListSection" class="card">
+    <div style="font-weight:700;margin-bottom:10px">🎵 คลังเพลงทั้งหมด</div>
+
+    <input id="songSearch" placeholder="ค้นหาเพลง..." 
+           style="width:100%;padding:8px;margin-bottom:10px;
+                  border:1px solid var(--border);border-radius:8px;
+                  font-family:'THSarabunNew',sans-serif;font-size:16px;">
+
+    <select id="keySearch"
+            style="width:100%;padding:8px;margin-bottom:10px;
+                   border:1px solid var(--border);border-radius:8px;
+                   font-family:'THSarabunNew',sans-serif;font-size:16px;">
+      <option value="">ค้นหาตามคีย์ (ทั้งหมด)</option>
+      <option value="C">C</option>
+      <option value="C#">C#</option>
+      <option value="D">D</option>
+      <option value="D#">D#</option>
+      <option value="E">E</option>
+      <option value="F">F</option>
+      <option value="F#">F#</option>
+      <option value="G">G</option>
+      <option value="G#">G#</option>
+      <option value="A">A</option>
+      <option value="A#">A#</option>
+      <option value="B">B</option>
+    </select>
+
+    <div id="songList"></div>
+  </section>
+
+  <!-- ============================
+       EDITOR PANEL
+  ============================ -->
+  <section id="editorSection" class="card">
     <div style="display:flex;justify-content:space-between;align-items:center">
       <div>
         <div class="small">Editor</div>
         <div style="font-weight:700;margin-top:6px">วางเนื้อเพลง + คอร์ด</div>
       </div>
-      <div style="display:flex;gap:8px;align-items:center">
+      <div style="display:flex;gap:8px">
         <button id="loadSample" class="btn secondary">ตัวอย่าง</button>
-        <button id="save" class="btn secondary">บันทึก</button>
-        <button id="load" class="btn secondary">เรียกคืน</button>
-        <button id="clear" class="btn">ล้าง</button>
+        <button id="saveSong" class="btn">บันทึกเพลง</button>
+        <button id="clear" class="btn secondary">ล้าง</button>
       </div>
     </div>
 
-    <textarea id="editor" placeholder="วางเนื้อเพลง + คอร์ด ที่นี่..."></textarea>
+    <textarea id="editor" placeholder="วางเนื้อเพลง + คอร์ดที่นี่..."></textarea>
 
+
+    <!-- CONTROLS: transpose, key buttons -->
     <div class="controls">
-      <button id="dec" class="btn">−</button>
-      <div id="transposeDisplay" style="min-width:110px;font-weight:700">Transpose: 0</div>
-      <button id="inc" class="btn">+</button>
+      <button id="dec" class="btn secondary">−</button>
+      <div id="transposeDisplay" style="font-weight:700">Transpose: 0</div>
+      <button id="inc" class="btn secondary">+</button>
 
-      <input id="range" type="range" min="-12" max="12" value="0" style="width:160px">
-      <div id="stepsLabel" class="small">0 semitones</div>
+      <input id="range" type="range" min="-12" max="12" value="0" 
+             style="width:160px">
+      <div id="stepsLabel" class="muted">0 semitones</div>
 
-      <div class="row" style="align-items:center">
+      <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
         <div class="small">ปรับเป็นคีย์:</div>
-        <div class="key-buttons" id="keyButtons"></div>
+        <div id="keyButtons" class="key-buttons"></div>
       </div>
     </div>
 
-    <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-      <button id="exportTxt" class="btn secondary">Export .txt</button>
+    <!-- Export -->
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+      <button id="exportTxt" hidden class="btn secondary">Export .txt</button>
       <button id="exportDoc" class="btn secondary">Export .doc</button>
       <button id="exportPdf" class="btn">Export .pdf</button>
-      <button id="printPreview" class="btn secondary">ปริ้นผลลัพธ์ (HTML)</button>
-      <button id="printAsPdf" class="btn">Print จาก PDF</button>
+      <button id="printAsPdf" class="btn secondary">Print</button>
     </div>
 
-    <!-- Search lyrics (DuckDuckGo + Bing-style site filters) -->
-    <div style="margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <input id="searchQuery" type="search" placeholder="ค้นหาเนื้อเพลง (เช่น ชื่อเพลง)" style="flex:1">
-      <button id="doSearch" class="btn secondary">ค้นหา (DuckDuckGo)</button>
-    </div>
-    <div id="searchResults"></div>
+    <div id="searchResults" style="margin-top:10px"></div>
   </section>
 
-  <!-- RIGHT -->
-  <section class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+  <!-- ============================
+       PREVIEW PANEL
+  ============================ -->
+  <section id="previewSection" class="card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
       <div>
         <div class="small">ผลลัพธ์</div>
-        <div style="font-weight:700;margin-top:6px">Preview (ลบบรรทัดว่างอัตโนมัติ)</div>
+        <div style="font-weight:700;margin-top:6px">Preview</div>
       </div>
       <div style="text-align:right">
         <div class="muted">Possible Keys:</div>
-        <div id="possibleKeys" class="muted" style="margin-top:4px"></div>
+        <div id="possibleKeys" style="margin-top:6px"></div>
       </div>
     </div>
 
@@ -140,780 +322,640 @@
   </section>
 </div>
 
-<!-- Modal for selecting song from list -->
-<div id="listPickerModal" style="display:none" class="modal-backdrop" role="dialog" aria-modal="true">
-  <div class="modal" role="document">
-    <h3>เลือกเพลงจากรายการ</h3>
-    <div id="listPickerInfo" class="muted small" style="margin-bottom:8px"></div>
-    <div id="listPickerItems"></div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
-      <button id="listPickerClose" class="btn secondary">ปิด</button>
-    </div>
-  </div>
-</div>
 
-<!-- html2pdf for PDF export -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <script>
-/* ============================
-   Music/transpose utils (same as before)
-   ============================ */
+/* ============================================================
+   Utilities & Local Storage
+   ============================================================ */
+
+function escapeHtml(s){
+  return (s||'').toString().replace(/[&<>"']/g, m => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[m]));
+}
+
+function uuidv4(){
+  if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  return 'id_' + Date.now().toString(36) + Math.random().toString(36).slice(2,9);
+}
+
+function getDb(){
+  try {
+    return JSON.parse(localStorage.getItem('song_db_plain') || '{"songs":[],"pdfs":[]}');
+  } catch(e){
+    return { songs:[], pdfs:[] };
+  }
+}
+
+function saveDb(db){
+  localStorage.setItem('song_db_plain', JSON.stringify(db));
+}
+
+/* ============================================================
+   Load songs.json (once)
+   ============================================================ */
+async function loadSongsJsonOnce(){
+  const flagKey = '__songs_json_loaded__';
+  if(localStorage.getItem(flagKey)) return;
+
+  try{
+    const resp = await fetch('./songs.json', {cache:'no-store'});
+    if(!resp.ok) return;
+
+    const json = await resp.json();
+    const arr = Array.isArray(json) ? json :
+                (json && Array.isArray(json.songs) ? json.songs : []);
+
+    const db = getDb();
+    db.songs = db.songs || [];
+
+    const seen = new Set(db.songs.map(s => (s.title||'').toLowerCase().trim()));
+
+    let added = 0;
+    arr.forEach(s=>{
+      if(!s || !s.title) return;
+      const key = s.title.toLowerCase().trim();
+      if(seen.has(key)) return;
+
+      db.songs.push({
+        id: s.id || uuidv4(),
+        title: s.title,
+        lyrics: s.lyrics || s.text || s.body || '',
+        youtube: s.youtube || ''
+      });
+
+      seen.add(key);
+      added++;
+    });
+
+    if(added>0) saveDb(db);
+    localStorage.setItem(flagKey, '1');
+  }catch(e){}
+}
+
+/* ============================================================
+   CHORD ENGINE — transpose / detect keys
+   ============================================================ */
+
 const SHARP = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
 const FLATMAP = {"Db":"C#","Eb":"D#","Gb":"F#","Ab":"G#","Bb":"A#"};
-const NOTE_TO_INDEX = {}; SHARP.forEach((n,i)=>NOTE_TO_INDEX[n]=i);
-function normNote(n){ if(!n) return n; return (FLATMAP[n]||n).toUpperCase(); }
+const NOTE_TO_INDEX = {};
+SHARP.forEach((n,i)=> NOTE_TO_INDEX[n] = i);
+
+function normNote(n){
+  if(!n) return n;
+  return (FLATMAP[n] || n).toUpperCase();
+}
+
 function isChordToken(tok){
   if(!tok) return false;
-  let t = tok.trim();
-  t = t.replace(/^[({\[]+|[)}\].,:!?]+$/g,"");
-  if(/^[A-G](#|b)?:.+/.test(t)) return false;
-  const lab = t.replace(/:$/,"");
-  if(/^(intro|verse|chorus|bridge|outro|pre-chorus|prechorus)$/i.test(lab)) return false;
-  return /^[A-G](#|b)?(m|min|maj|sus|dim|aug|add|M|maj7|m7|7|9|11|13|sus2|sus4|add9)?[0-9]*(\/[A-G](#|b)?)?$/i.test(t);
-}
-function transposeRoot(root,steps){ if(!root) return root; const r=normNote(root); const idx=NOTE_TO_INDEX[r]; if(idx===undefined) return root; return SHARP[(idx+steps+12)%12]; }
-function transposeChordToken(tok,steps){ const m=tok.trim().match(/^([A-G](#|b)?)(.*?)(?:\/([A-G](#|b)?))?$/i); if(!m) return tok; const root=m[1], mod=m[3]||'', bass=m[4]||''; const nr=transposeRoot(root,steps); const nb=bass?transposeRoot(bass,steps):''; return nb? nr+mod+"/"+nb : nr+mod; }
-function isMostlyChordLine(line){ const toks=line.trim().split(/\s+/).filter(Boolean); if(toks.length===0) return false; let c=0; toks.forEach(t=>{ if(isChordToken(t)) c++; }); return (c/toks.length) >= 0.5; }
-const labelRegex=/^\s*(\[[^\]]+\]|\b(?:intro|verse|chorus|bridge|outro|pre-chorus|prechorus)\b[:\]]?)(?:\s*)(.*)$/i;
-function processTokens(parts,steps){ return parts.map(p=>{ if(/^\s+$/.test(p)) return p; return isChordToken(p) ? transposeChordToken(p,steps) : p; }).join(''); }
-function transposeAll(text,steps){ const lines=text.replace(/\r/g,'').split('\n'); const out=[]; for(const line of lines){ if(line.trim()===""){ out.push(''); continue; } const m=line.match(labelRegex); if(m){ const label=m[1],rest=m[2]||""; if(rest.trim()===""){ out.push(label); continue; } out.push(label+" "+processTokens(rest.split(/(\s+)/),steps)); continue; } if(isMostlyChordLine(line)){ out.push(processTokens(line.split(/(\s+)/),steps)); continue; } out.push(processTokens(line.split(/(\s+)/),steps)); } return out.join('\n'); }
+  let t = tok.trim().replace(/^[({\[]+|[)}\].,:!?]+$/g,"");
+  if(/^(intro|verse|chorus|bridge|outro|pre-chorus|prechorus)$/i.test(t))
+    return false;
 
-/* ============================
-   Key detection
-   ============================ */
-function extractChords(text){ const set=new Set(); const lines=text.split('\n'); for(const line of lines){ for(const t of line.split(/(\s+)/)){ if(isChordToken(t)) set.add(t.trim()); } } return [...set]; }
+  return /^[A-G](#|b)?(m|min|maj|dim|aug|sus\d*|add\d*|maj7|m7|7|9|11|13)?(\/[A-G](#|b)?)?$/i
+    .test(t);
+}
+
+function transposeRoot(root, steps){
+  const base = normNote(root);
+  const idx = NOTE_TO_INDEX[base];
+  if(idx === undefined) return root;
+  return SHARP[(idx + steps + 12) % 12];
+}
+
+function transposeChordToken(tok, steps){
+  const m = tok.match(/^([A-G](#|b)?)(.*?)(?:\/([A-G](#|b)?))?$/);
+  if(!m) return tok;
+
+  const root = m[1];
+  const mod  = m[3] || "";
+  const bass = m[4] || "";
+
+  const nr = transposeRoot(root, steps);
+  const nb = bass ? transposeRoot(bass, steps) : "";
+
+  return nb ? nr + mod + "/" + nb : nr + mod;
+}
+
+function processTokens(parts, steps){
+  return parts.map(p=>{
+    if(/^\s+$/.test(p)) return p;
+    return isChordToken(p) ? transposeChordToken(p, steps) : p;
+  }).join('');
+}
+
+function isMostlyChordLine(line){
+  const toks = line.trim().split(/\s+/).filter(Boolean);
+  if(toks.length === 0) return false;
+  let c = 0;
+  toks.forEach(t=>{ if(isChordToken(t)) c++; });
+  return (c / toks.length) >= 0.5;
+}
+
+function transposeAll(text, steps){
+  const out = [];
+  const lines = text.replace(/\r/g,'').split("\n");
+  for(const line of lines){
+    if(line.trim()===""){
+      out.push("");
+      continue;
+    }
+    out.push(processTokens(line.split(/(\s+)/), steps));
+  }
+  return out.join("\n");
+}
+
+function extractChords(text){
+  const set = new Set();
+  text.split("\n").forEach(line=>{
+    line.split(/(\s+)/).forEach(tok=>{
+      if(isChordToken(tok)) set.add(tok.trim());
+    });
+  });
+  return [...set];
+}
+
 function detectPossibleKeys(tokens){
-  const MAJOR_KEYS = {"C":["C","Dm","Em","F","G","Am","Bdim"],"C#":["C#","D#m","Fm","F#","G#","A#m","Cdim"],"D":["D","Em","F#m","G","A","Bm","C#dim"],"D#":["D#","Fm","Gm","G#","A#","Cm","Ddim"],"E":["E","F#m","G#m","A","B","C#m","D#dim"],"F":["F","Gm","Am","A#","C","Dm","Edim"],"F#":["F#","G#m","A#m","B","C#","D#m","Fdim"],"G":["G","Am","Bm","C","D","Em","F#dim"],"G#":["G#","A#m","Cm","C#","D#","Fm","Gdim"],"A":["A","Bm","C#m","D","E","F#m","G#dim"],"A#":["A#","Cm","Dm","D#","F","Gm","Adim"],"B":["B","C#m","D#m","E","F#","G#m","A#dim"]};
-  const MINOR_KEYS = {"Am":["Am","Bdim","C","Dm","Em","F","G"],"A#m":["A#m","Cdim","C#","D#m","Fm","F#","G#"],"Bm":["Bm","C#dim","D","Em","F#m","G","A"],"Cm":["Cm","Ddim","D#","Fm","Gm","G#","A#"],"C#m":["C#m","D#dim","E","F#m","G#m","A","B"],"Dm":["Dm","Edim","F","Gm","Am","A#","C"],"D#m":["D#m","Fdim","F#","G#m","A#m","B","C#"],"Em":["Em","F#dim","G","Am","Bm","C","D"],"Fm":["Fm","Gdim","G#","A#m","Cm","C#","D#"],"F#m":["F#m","G#dim","A","Bm","C#m","D","E"],"Gm":["Gm","Adim","A#","Cm","Dm","D#","F"],"G#m":["G#m","A#dim","B","C#m","D#m","E","F#"],"Am2":["Am","Bdim","C","Dm","Em","F","G"]};
-  let scores = [];
-  let roots = tokens.map(t => {
+  const MAJOR = {
+    "C":["C","Dm","Em","F","G","Am","Bdim"],
+    "C#":["C#","D#m","Fm","F#","G#","A#m","Cdim"],
+    "D":["D","Em","F#m","G","A","Bm","C#dim"],
+    "D#":["D#","Fm","Gm","G#","A#","Cm","Ddim"],
+    "E":["E","F#m","G#m","A","B","C#m","D#dim"],
+    "F":["F","Gm","Am","A#","C","Dm","Edim"],
+    "F#":["F#","G#m","A#m","B","C#","D#m","Fdim"],
+    "G":["G","Am","Bm","C","D","Em","F#dim"],
+    "G#":["G#","A#m","Cm","C#","D#","Fm","Gdim"],
+    "A":["A","Bm","C#m","D","E","F#m","G#dim"],
+    "A#":["A#","Cm","Dm","D#","F","Gm","Adim"],
+    "B":["B","C#m","D#m","E","F#","G#m","A#dim"]
+  };
+
+  const roots = tokens.map(t=>{
     const m = t.match(/^([A-G](#|b)?)(m|min|maj)?/i);
     if(!m) return null;
-    let base = normNote(m[1]);
-    let type = (m[3]||"").toLowerCase();
+
+    const base = normNote(m[1]);
+    const type = (m[3] || "").toLowerCase();
+
     return (base + type).replace("maj","");
   }).filter(Boolean);
-  if(roots.length === 0) return [];
-  for(const key in MAJOR_KEYS){ const allowed = MAJOR_KEYS[key]; let count = roots.filter(r => allowed.includes(r)).length; let conf  = (count / roots.length) * 100; scores.push({key, mode:"major", score:conf}); }
-  for(const key in MINOR_KEYS){ const allowed = MINOR_KEYS[key]; let count = roots.filter(r => allowed.includes(r)).length; let conf  = (count / roots.length) * 100; scores.push({key, mode:"minor", score:conf}); }
-  scores.sort((a,b) => b.score - a.score);
-  return scores.filter(s=>s.score>0).slice(0,3);
-}
-function semitoneDiff(from,to){ const f=NOTE_TO_INDEX[normNote(from)]; const t=NOTE_TO_INDEX[normNote(to)]; if(f===undefined||t===undefined) return 0; return (t-f+12)%12; }
 
-/* ============================
-   UI wiring & events
-   ============================ */
-const editor=document.getElementById('editor');
-const preview=document.getElementById('preview');
-const dec=document.getElementById('dec'), inc=document.getElementById('inc');
-const range=document.getElementById('range'), transposeDisplay=document.getElementById('transposeDisplay'), stepsLabel=document.getElementById('stepsLabel');
-const loadSample=document.getElementById('loadSample'), clearBtn=document.getElementById('clear');
-const saveBtn=document.getElementById('save'), loadBtn=document.getElementById('load');
-const presentModeBtn=document.getElementById('presentMode');
-let currentSteps=0;
+  if(!roots.length) return [];
 
-/* key buttons */
-const keyButtonsEl=document.getElementById('keyButtons');
-const KEYS=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
-KEYS.forEach(k=>{
-  const b=document.createElement('button');
-  b.textContent=k;
-  b.addEventListener('click', ()=>{
-    const tokens = extractChords(editor.value);
-    const possible = detectPossibleKeys(tokens);
-    const base = (possible && possible.length>0) ? possible[0].key : 'C';
-    currentSteps = semitoneDiff(base, k);
-    updateUI();
+  let list = [];
+  Object.keys(MAJOR).forEach(key=>{
+    const allowed = MAJOR[key];
+    const match = roots.filter(r=>allowed.includes(r)).length;
+    const score = (match / roots.length) * 100;
+    if(score > 0) list.push({ key, score });
   });
-  keyButtonsEl.appendChild(b);
-});
 
-/* updateUI */
-function linkifyAndEscape(s){
-  if(!s) return '';
-  const esc = s.replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-  return esc.replace(/(https?:\/\/[^\s]+)/g, '<a class="preview-link" href="$1" target="_blank" rel="noopener">$1</a>');
+  return list.sort((a,b)=>b.score - a.score).slice(0,3);
 }
 
-function renderPreviewText(text){
-  if(!text) text='';
-  const lines = text.split('\n').map(l=>{
-    if(/\[.*?\]/.test(l)) return '<div class="chordpro">'+escapeHtml(l)+'</div>';
-    if(/^\s*([A-G][#b]?(m|min|maj|sus|dim|aug|add|7|m7|9|11|13)?(\/[A-G][#b]?)?\s+)+$/i.test(l)) return '<div class="chordpro">'+escapeHtml(l)+'</div>';
-    return linkifyAndEscape(l);
-  }).join('\n');
-  preview.innerHTML = lines;
-}
-function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-
-function updateUI(){
-  const tokens = extractChords(editor.value);
-  const possible = detectPossibleKeys(tokens);
-
-  let text = "";
-  if(possible && possible.length>0){
-    possible.forEach(p=>{ text += `${p.key} ${p.mode} (${p.score.toFixed(1)}%)<br>`; });
-  } else text = '(ไม่พบคอร์ด)';
-  document.getElementById('possibleKeys').innerHTML = text;
-
-  transposeDisplay.textContent = 'Transpose: ' + (currentSteps>=0?'+':'') + currentSteps;
-  stepsLabel.textContent = currentSteps + ' semitones';
-
-  let result = transposeAll(editor.value, currentSteps)
-                .split('\n')
-                .filter(line => line.trim() !== '')
-                .join('\n');
-
-  renderPreviewText(result);
-  range.value = currentSteps;
+function semitoneDiff(from, to){
+  const f = NOTE_TO_INDEX[normNote(from)];
+  const t = NOTE_TO_INDEX[normNote(to)];
+  if(f===undefined || t===undefined) return 0;
+  return (t - f + 12) % 12;
 }
 
-/* events */
-dec.addEventListener('click', ()=>{ currentSteps = Math.max(-12, currentSteps-1); updateUI(); });
-inc.addEventListener('click', ()=>{ currentSteps = Math.min(12, currentSteps+1); updateUI(); });
-range.addEventListener('input', e=>{ currentSteps = parseInt(e.target.value,10); updateUI(); });
-editor.addEventListener('input', updateUI);
+/* ============================================================
+   RENDER SONG LIST
+   ============================================================ */
 
-/* save/load */
-function saveData(){ localStorage.setItem('chord_text', editor.value); localStorage.setItem('chord_steps', currentSteps); alert('บันทึกแล้ว'); }
-function loadData(){ const t = localStorage.getItem('chord_text'); const s = localStorage.getItem('chord_steps'); if(!t){ alert('ไม่มีข้อมูลบันทึก'); return; } editor.value = t; currentSteps = parseInt(s||'0',10); updateUI(); }
-saveBtn.addEventListener('click', saveData); loadBtn.addEventListener('click', loadData);
+function renderSongList(filter=''){
+  const db = getDb();
+  db.songs = db.songs || [];
 
-/* clear / sample */
-clearBtn.addEventListener('click', ()=>{ editor.value=''; updateUI(); });
-loadSample.addEventListener('click', ()=>{ editor.value =
-`เพลง  ชีวีเราอยู่ในพระองค์
-Intro: g  em  am  d
+  const q = (filter||'').toLowerCase().trim();
+  const keyFilter = (document.getElementById("keySearch") || {}).value || "";
+  const box = document.getElementById('songList');
 
-Chorus:
-      G
-C: ชีวีเราอยู่ในพระองค์
-   Em
-กำลังเราอยู่ในพระองค์
-        C                        G/D          D
-ความวางใจเราอยู่ในพระองค์  ในพระองค์
+  const list = db.songs.filter(s=>{
+    const lyrics = s.lyrics || "";
 
-Verse:
-        C                 D7/C            G/B  G
-1: เราจะสรรเสริญ  ด้วยสุดสิ้นดวงจิต
-    C                 D7/C          G/B  G
-เราจะสรรเสริญ  ด้วยสุดสิ้นกำลัง
-     D         G          E           Am
-ด้วยสุดสิ้นชีวิต  ด้วยสุดสิ้นจิตใจ
-F           C/E     D
-ความวางใจอยู่ในพระองค์`; currentSteps = 0; updateUI(); });
+    const tokens = extractChords(lyrics);
+    const possible = detectPossibleKeys(tokens);
+    const songKey = possible.length ? possible[0].key : "";
 
-/* presentation */
-let present = false;
-presentModeBtn.addEventListener('click', ()=>{ present = !present; if(present){ document.documentElement.requestFullscreen?.(); document.querySelectorAll('.card')[0].style.display = 'none'; preview.style.fontSize = '28px'; preview.style.lineHeight = '1.9'; } else { document.exitFullscreen?.(); document.querySelectorAll('.card')[0].style.display = ''; preview.style.fontSize = ''; preview.style.lineHeight = ''; } });
+    const matchText = (s.title||"").toLowerCase().includes(q) ||
+                      lyrics.toLowerCase().includes(q);
 
-/* init */
-editor.value = localStorage.getItem('chord_text') || '';
-currentSteps = parseInt(localStorage.getItem('chord_steps')||'0',10);
-updateUI();
+    const matchKey = keyFilter==="" || keyFilter===songKey;
 
-/* ============================
-   Export & Print (same)
-   ============================ */
-document.getElementById('exportTxt').addEventListener('click', ()=>{ const text = preview.innerText || editor.value || ''; const blob = new Blob([text], {type:'text/plain;charset=utf-8'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'song.txt'; a.click(); URL.revokeObjectURL(a.href); });
+    return matchText && matchKey;
+  });
 
-document.getElementById('exportDoc').addEventListener('click', ()=>{ const html = `<!doctype html><html><head><meta charset="utf-8"></head><body><pre style="white-space:pre-wrap;font-family:inherit;">${escapeHtml(preview.innerText || editor.value || '')}</pre></body></html>`; const blob = new Blob([html], {type:'application/msword'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'song.doc'; a.click(); URL.revokeObjectURL(a.href); });
-
-document.getElementById('exportPdf').addEventListener('click', async ()=>{ const el = preview; const oldColor = el.style.color; const oldBg = el.style.background; el.style.color = "#000"; el.style.background = "#fff"; if(window.html2pdf){ const opt = { margin: 8, filename: 'song.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }; try{ await html2pdf().set(opt).from(el).save(); }catch(e){ console.error(e); alert('เกิดข้อผิดพลาดขณะสร้าง PDF'); } } else { const w = window.open('', '_blank'); w.document.write('<html><head><meta charset="utf-8"><title>PDF</title></head><body><pre style="white-space:pre-wrap;font-family:inherit;color:#000;background:#fff;">' + escapeHtml(preview.innerText || '') + '</pre></body></html>'); w.document.close(); w.focus(); setTimeout(()=>w.print(), 600); } el.style.color = oldColor; el.style.background = oldBg; });
-
-document.getElementById('printPreview').addEventListener('click', ()=>{ const w = window.open('', '_blank'); const content = preview.innerHTML; w.document.write(`<html><head><meta charset="utf-8"><title>Print Preview</title><style>body{font-family:"Sarabun",sans-serif;padding:24px;line-height:1.8;color:#000;background:#fff}pre,div{white-space:pre-wrap;font-family:"Sarabun",sans-serif;font-size:16px}a{color:#0077cc;text-decoration:underline}.chordpro{color:#007a4d;font-weight:600}</style></head><body>${content}</body></html>`); w.document.close(); w.focus(); w.print(); });
-
-document.getElementById('printAsPdf').addEventListener('click', async ()=>{ const el = preview; const oldColor = el.style.color; const oldBg = el.style.background; el.style.color = "#000"; el.style.background = "#fff"; const opt = { margin: 8, filename: 'song.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }; try{ const pdfBlob = await html2pdf().set(opt).from(el).outputPdf('blob'); const url = URL.createObjectURL(pdfBlob); const w = window.open(url, '_blank'); if(w){ w.onload = () => { try{ w.print(); }catch(e){} }; } else { const a = document.createElement('a'); a.href = url; a.download = 'song.pdf'; a.click(); } }catch(e){ console.error(e); alert('สร้าง PDF เพื่อพิมพ์ไม่สำเร็จ'); } finally { el.style.color = oldColor; el.style.background = oldBg; } });
-
-/* ============================
-   Search: DuckDuckGo with Bing-style site filters
-   ============================ */
-const ALLORIGINS = 'https://api.allorigins.win/raw?url=';
-const doSearchBtn = document.getElementById('doSearch');
-const searchQueryInput = document.getElementById('searchQuery');
-const searchResultsBox = document.getElementById('searchResults');
-
-doSearchBtn.addEventListener('click', ()=>{ let q = searchQueryInput.value.trim(); q = appendWorshipKeywords(q); doSearch(q); });
-searchQueryInput.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); let q = searchQueryInput.value.trim(); q = appendWorshipKeywords(q); doSearch(q); } });
-
-function appendWorshipKeywords(q){
-  if(!q) return q;
-  const sites = [
-    "site:thaiworship.com",
-    "site:deforever.com",
-    "site:worshipthai.com",
-    "site:christianthai.com",
-    "site:lyrics.worshipsongs"
-  ].join(" | ");
-  return `lyrics ${q} เพลง นมัสการ ${sites}`;
-}
-
-async function doSearch(q){
-  if(!q){ alert('กรุณาพิมพ์คำค้นหา เช่น "ชื่อเพลง"'); return; }
-  searchResultsBox.innerHTML = '<div class="small">กำลังค้นหา... (DuckDuckGo)</div>';
-  const duckUrl = 'https://duckduckgo.com/html/?q=' + encodeURIComponent(q);
-  try{
-    const res = await fetch(ALLORIGINS + encodeURIComponent(duckUrl));
-    if(!res.ok) throw new Error('ไม่สามารถเข้าถึงผลลัพธ์ได้');
-    const html = await res.text();
-    renderSearchResultsFromDuckHtml(html, q);
-  }catch(err){
-    console.error(err);
-    searchResultsBox.innerHTML = '<div class="small">ค้นหาไม่สำเร็จ — ลองอีกครั้งหรือตรวจสอบเครือข่าย</div>';
-  }
-}
-
-/* clean DuckDuckGo redirect url if contains uddg=... (double decode) */
-function cleanDuckUrl(url){
-  if(!url) return "";
-  try{
-    const m = url.match(/uddg=([^&]+)/);
-    if(m && m[1]){
-      let decoded = decodeURIComponent(m[1]);
-      try{ decoded = decodeURIComponent(decoded); }catch(e){}
-      return decoded;
-    }
-    if(url.startsWith('file://') && url.includes('uddg=')){
-      const mm = url.match(/uddg=([^&]+)/);
-      if(mm && mm[1]) {
-        let d = decodeURIComponent(mm[1]);
-        try{ d = decodeURIComponent(d); }catch(e){}
-        return d;
-      }
-    }
-    if(!/^https?:\/\//i.test(url)){
-      url = url.replace(/^file:\/\//i,'');
-      if(!/^https?:\/\//i.test(url)) url = 'https://' + url.replace(/^https?:\/\//i,'');
-    }
-    return url;
-  }catch(e){
-    return url;
-  }
-}
-
-/* clean snippet: remove chord tokens and control chars */
-function cleanSnippet(s){
-  if(!s) return '';
-  s = s.replace(/\b[A-G][#b]?(m|min|maj|sus|dim|aug|add|M|maj7|m7|7|9|11|13)?(\/[A-G][#b]?)?\b/g, '');
-  let t = s.replace(/\s+/g,' ').trim();
-  t = t.replace(/[\u0000-\u001F\u007F-\u009F]/g,'');
-  if(t.length > 350) t = t.slice(0,350) + '…';
-  return t;
-}
-
-/* parse DuckDuckGo HTML results */
-function renderSearchResultsFromDuckHtml(html, query){
-  searchResultsBox.innerHTML = '';
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, 'text/html');
-
-  let items = [];
-  const candidates = doc.querySelectorAll('div.result, div.result__body, article.result, .result--organic, .web_result');
-  if(candidates && candidates.length>0){
-    candidates.forEach(node=>{
-      try{
-        const a = node.querySelector('a.result__a') || node.querySelector('a[href]');
-        if(!a) return;
-        const rawHref = a.getAttribute('href') || a.href || '';
-        const href = cleanDuckUrl(rawHref);
-        const title = (a.textContent || '').trim();
-        const snippetNode = node.querySelector('.result__snippet') || node.querySelector('.result__abstract') || node.querySelector('.snippet') || node.querySelector('.result__extras') || node.querySelector('.c-abstract') || null;
-        const snippet = snippetNode ? cleanSnippet(snippetNode.textContent) : '';
-        items.push({title, href, snippet, thumb:''});
-      }catch(e){}
-    });
-  }
-
-  if(items.length === 0){
-    const anchors = doc.querySelectorAll('a[href]');
-    anchors.forEach(a=>{
-      const hrefRaw = a.getAttribute('href') || '';
-      const href = cleanDuckUrl(hrefRaw);
-      const title = (a.textContent || '').trim();
-      if(title && href) items.push({title, href, snippet:'', thumb:''});
-    });
-  }
-
-  if(items.length === 0){
-    searchResultsBox.innerHTML = '<div class="small">ไม่พบผลลัพธ์ — ลองคำค้นอื่น</div>';
+  if(!list.length){
+    box.innerHTML = '<div class="small">ไม่พบเพลง</div>';
     return;
   }
 
-  items.slice(0,8).forEach((it, idx)=>{
-    const row = document.createElement('div');
-    row.className = 'sr-row';
-    row.innerHTML = `
-      <div style="flex:1">
-        <div style="font-weight:700">${escapeHtml(it.title)}</div>
-        <div class="muted" style="margin-top:6px">${escapeHtml(it.snippet)}</div>
-        <div class="muted label" style="margin-top:6px;font-size:12px">${escapeHtml(it.href)}</div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <button class="btn secondary btn-insert" data-idx="${idx}">แทรก</button>
-        <button class="btn secondary btn-fetch" data-idx="${idx}">ดึงคอร์ด/เนื้อเพลง</button>
-        <a class="btn" href="${it.href}" target="_blank" rel="noopener">เปิด</a>
-      </div>
-    `;
-    searchResultsBox.appendChild(row);
-  });
+  box.innerHTML = list.map(s=>{
+    const lyrics = s.lyrics || "";
+    const tokens = extractChords(lyrics);
+    const possible = detectPossibleKeys(tokens);
+    const songKey = possible.length ? possible[0].key : "-";
 
-  // attach handlers
-  Array.from(searchResultsBox.querySelectorAll('.btn-insert')).forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const idx = parseInt(btn.getAttribute('data-idx'),10);
-      const it = items[idx];
-      if(!it) return;
-      const cleanHref = cleanDuckUrl(it.href || '');
-      const cleanedSnippet = cleanSnippet(it.snippet || '');
-      const block = buildInsertBlock(query, it.title || '(ไม่พบชื่อ)', cleanHref, cleanedSnippet);
-      insertIntoEditorAtCursorOrAppend(block);
-      updateUI();
-      searchResultsBox.innerHTML = `<div class="small">แทรกเรียบร้อย: ${escapeHtml(it.title || '')}</div>`;
-    });
-  });
+    const sampleLines = lyrics
+      .split("\n")
+      .slice(0,2)
+      .map(line=>escapeHtml(line))
+      .join("<br>");
 
-  Array.from(searchResultsBox.querySelectorAll('.btn-fetch')).forEach(btn=>{
-    btn.addEventListener('click', async ()=>{
-      const idx = parseInt(btn.getAttribute('data-idx'),10);
-      const it = items[idx];
-      if(!it || !it.href){ alert('ลิงก์ไม่ถูกต้อง'); return; }
-      btn.textContent = 'กำลังดึง...';
-      try{
-        const url = cleanDuckUrl(it.href);
-        // NEW: support list pages - detect and show picker
-        await handleFetchFromSearchResult(url, query);
-      }catch(e){
-        console.error(e);
-        alert('ดึงเนื้อเพลงไม่สำเร็จ');
-      } finally {
-        btn.textContent = 'ดึงคอร์ด/เนื้อเพลง';
-      }
-    });
-  });
-}
+    return `
+      <div class="sidebar-list-item" data-id="${s.id}">
+        <input type="checkbox" class="song-check" value="${s.id}">
+        <div style="flex:1">
+          <div class="title">${escapeHtml(s.title)}</div>
 
-/* build insert block */
-function buildInsertBlock(query, title, href, snippet){
-  href = href || '';
-  snippet = snippet || '';
-  if(href && !/^https?:\/\//i.test(href)) {
-    href = 'https://' + href.replace(/^https?:\/\//i,'');
-  }
-  return `————————————
-ค้นหา: ${query}
-ผลลัพธ์:
-${title}
+          <div class="small" style="font-size:13px;color:#0ea5e9;margin-top:2px;">
+            Key: ${songKey}
+          </div>
 
-ลิงก์:
-${href}
+          ${s.youtube ? `<div class="youtube">${escapeHtml(s.youtube)}</div>` : ""}
 
-คำอธิบาย:
-${snippet}
-
-————————————
-
-`;
-}
-
-function insertIntoEditorAtCursorOrAppend(text){
-  const ta = editor;
-  if(document.activeElement === ta){
-    const start = ta.selectionStart, end = ta.selectionEnd;
-    const before = ta.value.slice(0,start), after = ta.value.slice(end);
-    ta.value = before + text + after;
-    const pos = before.length + text.length;
-    ta.setSelectionRange(pos,pos);
-  } else {
-    if(ta.value && !ta.value.endsWith('\n')) ta.value += '\n';
-    ta.value += text;
-  }
-}
-
-/* ============================
-   NEW: handle fetch from search result — detect list page and prompt selection
-   ============================ */
-async function handleFetchFromSearchResult(url, originalQuery){
-  try{
-    const api = ALLORIGINS + encodeURIComponent(url);
-    const res = await fetch(api);
-    if(!res.ok) throw new Error('ไม่สามารถโหลดหน้าเว็บได้');
-    const html = await res.text();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-
-    // detect list page for deforever or thaiworship
-    const host = (new URL(url)).hostname.toLowerCase();
-
-    // If deforever/songList or contains many links -> treat as list
-    if(host.includes('deforever.com') && /songlist|songList|songlist.php|songList.php/i.test(url)){
-      const list = parseDeForeverList(doc, url);
-      if(list && list.length>0){
-        showListPicker(list, originalQuery, url, 'deforever');
-        return;
-      }
-    }
-
-    // thaiworship: if page contains many song links (category/tag), use parser
-    if(host.includes('thaiworship.com') && detectIsThaiWorshipList(doc)){
-      const list = parseThaiWorshipList(doc, url);
-      if(list && list.length>0){
-        showListPicker(list, originalQuery, url, 'thaiworship');
-        return;
-      }
-    }
-
-    // fallback: not a list — parse single page content normally
-    const fetched = await fetchChordAndLyrics(url); // existing function will parse single page
-    insertIntoEditorAtCursorOrAppend(`\n\n${fetched}\n\n`);
-    updateUI();
-  }catch(err){
-    console.error(err);
-    alert('ไม่สามารถประมวลผลลิงก์นี้ได้');
-  }
-}
-
-/* detect thaiworship list heuristics */
-function detectIsThaiWorshipList(doc){
-  // if there are many article links or post-list classes
-  const anchors = doc.querySelectorAll('a[href]');
-  let countSongLike = 0;
-  anchors.forEach(a=>{
-    const href = a.getAttribute('href')||'';
-    if(/\/\d{4}\/\d{2}\/|\/category\/|\/tag\/|\/lyrics\/|\/song\//i.test(href)) countSongLike++;
-  });
-  return countSongLike > 6;
-}
-
-/* parse list from deforever (extract song links & titles) */
-function parseDeForeverList(doc, baseUrl){
-  const items = [];
-  // deforever song lists often have <a href="songdetail.php?id=...">text</a> or tables
-  const anchors = doc.querySelectorAll('a[href]');
-  anchors.forEach(a=>{
-    const href = a.getAttribute('href') || '';
-    const txt = (a.textContent||'').trim();
-    if(!txt) return;
-    // filter likely song links
-    if(/songdetail\.php|song\.php|songID|songId|/i.test(href) || /song|เพลง|lyrics/gi.test(txt)){
-      const url = resolveUrl(baseUrl, href);
-      items.push({title:txt, href:url});
-    }
-  });
-  // dedupe by href
-  return dedupeList(items);
-}
-
-/* parse list from thaiworship (category/tag pages) */
-function parseThaiWorshipList(doc, baseUrl){
-  const items = [];
-  // common selectors: .entry-title a, .post-title a, .td-module-title a
-  const sel = ['.entry-title a', '.post-title a', '.td-module-title a', '.entry a', 'h2 a', 'h3 a'];
-  sel.forEach(s=>{
-    doc.querySelectorAll(s).forEach(a=>{
-      const href = a.getAttribute('href') || '';
-      const txt = (a.textContent||'').trim();
-      if(!txt || !href) return;
-      items.push({title: txt, href: resolveUrl(baseUrl, href)});
-    });
-  });
-  // fallback: scan anchors under main content
-  if(items.length===0){
-    const anchors = doc.querySelectorAll('a[href]');
-    anchors.forEach(a=>{
-      const href = a.getAttribute('href')||'';
-      const txt = (a.textContent||'').trim();
-      if(!txt) return;
-      if(/\/lyrics\/|\/tag\/|\/category\/|\/song|เพลง|lyrics/gi.test(href+txt)){
-        items.push({title:txt, href: resolveUrl(baseUrl, href)});
-      }
-    });
-  }
-  return dedupeList(items);
-}
-
-/* dedupe items by href and reasonable title length */
-function dedupeList(items){
-  const map = new Map();
-  items.forEach(it=>{
-    const key = (it.href||'').split('#')[0];
-    if(!key) return;
-    if(!map.has(key) && it.title.length>1){
-      map.set(key, {title: it.title.replace(/\s+/g,' ').trim(), href: key});
-    }
-  });
-  return Array.from(map.values());
-}
-
-/* resolve relative URLs */
-function resolveUrl(base, href){
-  try{
-    return new URL(href, base).href;
-  }catch(e){
-    return href;
-  }
-}
-
-/* show modal list picker with fuzzy ranking */
-function showListPicker(list, query, listUrl, siteKey){
-  const modal = document.getElementById('listPickerModal');
-  const info = document.getElementById('listPickerInfo');
-  const itemsDiv = document.getElementById('listPickerItems');
-  itemsDiv.innerHTML = '';
-  info.textContent = `พบ ${list.length} รายการจาก: ${listUrl} — เลือกเพลงที่ต้องการ (ค้นหา: "${query}")`;
-
-  const ranked = rankListByQuery(list, query).slice(0,25); // show top 25
-  if(ranked.length===0){
-    itemsDiv.innerHTML = '<div class="muted">ไม่พบรายการที่เกี่ยวข้องในหน้านี้</div>';
-  } else {
-    ranked.forEach((it, idx)=>{
-      const row = document.createElement('div');
-      row.className = 'song-row';
-      row.innerHTML = `
-        <div class="song-left">
-          <div class="song-title">${escapeHtml(it.title)}</div>
-          <div class="song-meta">${escapeHtml(it.href)}</div>
-        </div>
-        <div class="song-actions">
-          <span class="score-badge">${(it.score*100).toFixed(0)}%</span>
-          <div style="height:8px"></div>
-          <div style="display:flex;gap:6px">
-            <button class="btn secondary pick-song" data-idx="${idx}">ดึงเพลงนี้</button>
-            <a class="btn" href="${it.href}" target="_blank" rel="noopener">เปิด</a>
+          <div class="small" style="margin-top:4px;color:#6b7280;font-size:13px;">
+            ${sampleLines}
           </div>
         </div>
-      `;
-      itemsDiv.appendChild(row);
-    });
 
-    // handlers for pick buttons
-    Array.from(itemsDiv.querySelectorAll('.pick-song')).forEach(btn=>{
-      btn.addEventListener('click', async ()=>{
-        const idx = parseInt(btn.getAttribute('data-idx'),10);
-        const it = ranked[idx];
-        if(!it) return;
-        // close modal
-        closeListPicker();
-        // fetch the selected song page and parse
-        try{
-          const fetched = await fetchChordAndLyrics(it.href);
-          insertIntoEditorAtCursorOrAppend(`\n\n${fetched}\n\n`);
-          updateUI();
-        }catch(e){
-          console.error(e);
-          alert('ดึงเพลงไม่สำเร็จ');
-        }
-      });
-    });
-  }
+        <div class="actions">
+          <button class="btn secondary insert-btn" data-id="${s.id}">แทรก</button>
+          <button class="btn secondary load-btn" data-id="${s.id}">โหลด</button>
+          <button class="btn secondary delete-btn" data-id="${s.id}">ลบ</button>
+        </div>
+      </div>
+    `;
+  }).join('');
 
-  // show modal
-  modal.style.display = 'flex';
-}
-
-/* close modal */
-function closeListPicker(){
-  const modal = document.getElementById('listPickerModal');
-  modal.style.display = 'none';
-}
-document.getElementById('listPickerClose').addEventListener('click', closeListPicker);
-
-/* rank list by fuzzy token overlap */
-function rankListByQuery(list, query){
-  const qTokens = tokenizeForMatch(query);
-  return list.map(it=>{
-    const title = it.title || '';
-    const tTokens = tokenizeForMatch(title);
-    const score = tokenOverlapScore(qTokens, tTokens);
-    return {...it, score};
-  }).sort((a,b)=>b.score - a.score);
-}
-
-/* tokenize: lowercase, remove punctuation, split tokens, keep thai and english words */
-function tokenizeForMatch(s){
-  if(!s) return [];
-  const t = s.toLowerCase().replace(/[^\p{L}\p{N}\s]+/gu,' ');
-  const toks = t.split(/\s+/).filter(Boolean).map(x=>x.trim());
-  return toks;
-}
-
-/* token overlap score: intersection / union */
-function tokenOverlapScore(a,b){
-  if(!a.length || !b.length) return 0;
-  const A = new Set(a);
-  const B = new Set(b);
-  let inter = 0;
-  A.forEach(x=>{ if(B.has(x)) inter++; });
-  const union = new Set([...A,...B]).size;
-  return inter / union;
-}
-
-/* ============================
-   Fetch lyrics & chords from target page (via AllOrigins)
-   site-specific parsers for thaiworship.com & deforever.com
-   ============================ */
-async function fetchChordAndLyrics(url){
-  if(!url) return '⚠ ลิงก์ไม่ถูกต้อง';
-  try{
-    const api = ALLORIGINS + encodeURIComponent(url);
-    const res = await fetch(api);
-    if(!res.ok) throw new Error('ไม่สามารถโหลดหน้าเว็บได้');
-    const html = await res.text();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-
-    // domain detection
-    let host = '';
-    try { host = new URL(url).hostname.toLowerCase(); } catch(e){ host = ''; }
-
-    // If it's clearly a list page, return a special marker (handled upstream)
-    if(host.includes('deforever.com') && /songlist|songList|songlist.php|songList.php/i.test(url)){
-      // the caller should have detected and handled list pages
-      // fallback: parse list and choose first
-      const list = parseDeForeverList(doc, url);
-      if(list.length>0) {
-        // choose first item as fallback
-        const sel = list[0];
-        return await fetchChordAndLyrics(sel.href);
-      }
-    }
-
-    if(host.includes('thaiworship.com') && detectIsThaiWorshipList(doc)){
-      const list = parseThaiWorshipList(doc, url);
-      if(list.length>0){
-        const sel = list[0];
-        return await fetchChordAndLyrics(sel.href);
-      }
-    }
-
-    // site-specific single-page parsing
-    if(host.includes('thaiworship.com')) return parseThaiWorshipSongPage(doc, url);
-    if(host.includes('deforever.com')) return parseDeForeverSongPage(doc, url);
-
-    // fallback: generic parse
-    return genericParse(doc, url);
-  }catch(err){
-    console.error(err);
-    return '⚠ โหลดเนื้อเพลงไม่สำเร็จ (อาจถูกป้องกันโดยเว็บเป้าหมาย)';
-  }
-}
-
-/* parse single song page: thaiworship */
-function parseThaiWorshipSongPage(doc, url){
-  // try common selectors
-  const selectors = ['.entry-content', '.post-content', '.lyrics', '.song-lyrics', '.wp-block-lyrics', 'pre'];
-  for(const s of selectors){
-    const el = doc.querySelector(s);
-    if(el){
-      let t = (el.innerText || el.textContent || '').replace(/\r/g,'').trim();
-      t = t.replace(/\n{3,}/g,'\n\n');
-      if(t.length>40) return `ดึงจาก: ${url}\n\n${t}`;
-    }
-  }
-  // fallback: largest block
-  const fallback = fallbackLargestTextBlock(doc);
-  if(fallback) return `ดึงจาก: ${url}\n\n${fallback}`;
-  return '⚠ ไม่พบเนื้อเพลงในหน้านี้ (thaiworship)';
-}
-
-/* parse single song page: deforever */
-function parseDeForeverSongPage(doc, url){
-  const selectors = ['.songtext', '.songContent', '.lyrics', '.lyric', '.entry-content', 'pre', '.content', '.post-content'];
-  for(const s of selectors){
-    const el = doc.querySelector(s);
-    if(el){
-      let t = (el.innerText || el.textContent || '').replace(/\r/g,'').trim();
-      t = t.replace(/\n{3,}/g,'\n\n');
-      if(t.length>40) return `ดึงจาก: ${url}\n\n${t}`;
-    }
-  }
-  const fallback = fallbackLargestTextBlock(doc);
-  if(fallback) return `ดึงจาก: ${url}\n\n${fallback}`;
-  return '⚠ ไม่พบเนื้อเพลงในหน้านี้ (deforever)';
-}
-
-/* generic parse fallback */
-function genericParse(doc, url){
-  const selectors = ['.entry-content', '.post-content', '.lyrics', '.lyric', '.song-lyrics', '.chords', 'pre', '.content', 'article'];
-  for(const s of selectors){
-    const el = doc.querySelector(s);
-    if(el){
-      let t = (el.innerText || el.textContent || '').replace(/\r/g,'').trim();
-      t = t.replace(/\n{3,}/g,'\n\n');
-      if(t.length>50) return `ดึงจาก: ${url}\n\n${t}`;
-    }
-  }
-  const fallback = fallbackLargestTextBlock(doc);
-  if(fallback) return `ดึงจาก: ${url}\n\n${fallback}`;
-  const bodyText = (doc.body && doc.body.innerText)? (doc.body.innerText.replace(/\r/g,'').replace(/\n{3,}/g,'\n\n').trim()) : '';
-  if(bodyText.length>80) return `ดึงจาก: ${url}\n\n${bodyText}`;
-  return '⚠ ไม่พบเนื้อเพลงหรือคอร์ดในหน้านี้';
-}
-
-/* fallbackLargestTextBlock reused */
-function fallbackLargestTextBlock(doc){
-  const nodes = Array.from(doc.querySelectorAll('p, div, section, article, pre'));
-  let best={score:0,text:''};
-  nodes.forEach(node=>{
-    const t=(node.innerText||node.textContent||'').replace(/\r/g,'').trim();
-    if(t.length<40) return;
-    let score = 0;
-    if(/[ก-๙]/.test(t)) score += 5;
-    if(/\b[A-G][#b]?(m|min|maj|sus|dim|aug|add|7|m7|9|11|13)?(\/[A-G][#b]?)?\b/.test(t)) score += 4;
-    score += Math.min(20, t.length/50);
-    if(score>best.score){ best={score, text:t}; }
+  // BIND events
+  Array.from(box.querySelectorAll('.insert-btn')).forEach(b=>{
+    b.onclick = ()=> insertSongToEditor(b.dataset.id);
   });
-  return best.text.replace(/\n{3,}/g,'\n\n').trim();
+  Array.from(box.querySelectorAll('.load-btn')).forEach(b=>{
+    b.onclick = ()=> loadSong(b.dataset.id);
+  });
+  Array.from(box.querySelectorAll('.delete-btn')).forEach(b=>{
+    b.onclick = ()=>{
+      if(confirm('ลบเพลงนี้?')) deleteSong(b.dataset.id);
+    };
+  });
 }
 
-/* ============================
-   Convert to ChordPro (heuristic)
-   ============================ */
-function convertToChordPro(raw){
-  if(!raw) return '';
-  const lines = raw.split('\n').map(l=>l.replace(/\r/g,''));
-  const out = [];
-  for(let i=0;i<lines.length;i++){
-    const L = lines[i].trim();
-    if(!L) continue;
-    if(isMostlyChordLine(L)){
-      const next = (lines[i+1]||'').trim();
-      if(next && !isMostlyChordLine(next)){
-        const chords = L.split(/\s+/).filter(Boolean);
-        const words = next.split(/\s+/);
-        const combined = [];
-        let ci=0;
-        for(let wi=0; wi<words.length; wi++){
-          if(ci < chords.length){
-            combined.push('['+chords[ci++]+']' + words[wi]);
-          } else {
-            combined.push(words[wi]);
-          }
-        }
-        out.push(combined.join(' '));
-        i += 1;
-        continue;
-      } else {
-        out.push('{comment: chords} ' + L);
-        continue;
+/* ============================================================
+   INSERT / LOAD / DELETE SONG
+   ============================================================ */
+
+function insertSongToEditor(id){
+  const db = getDb();
+  const s = (db.songs||[]).find(x=>x.id===id);
+  if(!s){ alert('ไม่พบเพลง'); return; }
+
+  const txt = `\n————————————\n${s.title}\n${s.youtube?('YouTube: '+s.youtube+'\n'):''}${s.lyrics}\n————————————\n\n`;
+
+  const ta = document.getElementById('editor');
+
+  if(document.activeElement === ta){
+    const start = ta.selectionStart, end = ta.selectionEnd;
+    ta.value = ta.value.slice(0,start) + txt + ta.value.slice(end);
+    ta.setSelectionRange(start + txt.length, start + txt.length);
+  } else {
+    if(ta.value && !ta.value.endsWith('\n')) ta.value += '\n';
+    ta.value += txt;
+  }
+
+  updateUI();
+
+  // สำหรับมือถือ → สลับไป Editor ให้อัตโนมัติ
+  if(window.innerWidth <= 768){
+    showSection('editorSection');
+  }
+}
+
+function loadSong(id){
+  const db = getDb();
+  const s = (db.songs||[]).find(x=>x.id===id);
+  if(!s) return;
+
+  const ta = document.getElementById('editor');
+  ta.value = s.lyrics || '';
+
+  currentSteps = 0;
+  updateUI();
+
+  // show YouTube link in preview
+  if(s.youtube){
+    const prev = document.getElementById('preview');
+    prev.innerHTML = 
+      `<div style="color:#0284c7;margin-bottom:10px">
+         🎵 YouTube: <a href="${s.youtube}" target="_blank">${s.youtube}</a>
+       </div>` 
+      + prev.innerHTML;
+  }
+
+  if(window.innerWidth <= 768){
+    showSection('editorSection');
+  }
+}
+
+function deleteSong(id){
+  const pass = prompt('กรุณากรอกรหัสเพื่อยืนยันการลบ ');
+  if(pass !== 'southhope'){
+    alert('รหัสไม่ถูกต้อง');
+    return;
+  }
+  const db = getDb();
+  db.songs = (db.songs||[]).filter(s=>s.id !== id);
+  saveDb(db);
+  renderSongList(document.getElementById('songSearch').value);
+}
+
+/* ============================================================
+   PREVIEW + UPDATE UI
+   ============================================================ */
+
+const editorEl = document.getElementById("editor");
+const previewEl = document.getElementById("preview");
+const transposeDisplay = document.getElementById("transposeDisplay");
+const stepsLabel = document.getElementById("stepsLabel");
+const range = document.getElementById("range");
+let currentSteps = 0;
+
+
+
+function cleanEmptyLines(text){
+  const lines = text.replace(/\r/g, "").split("\n");
+
+  let result = [];
+  let empty = false;
+
+  for(let line of lines){
+    if(line.trim() === ""){
+      if(!empty){
+        result.push(""); // อนุญาตแค่ 1 บรรทัด
+        empty = true;
       }
     } else {
-      const m = L.match(/^([A-G][#b]?(m|min|maj|sus|dim|add|M|7)?):\s*(.*)$/i);
-      if(m){
-        out.push('['+m[1]+'] '+m[3]);
-      } else {
-        out.push(L);
-      }
+      result.push(line);
+      empty = false;
     }
   }
-  return out.filter(Boolean).join('\n');
+  return result.join("\n");
 }
 
-/* ============================
-   Utility functions end
-   ============================ */
 
+
+function renderPreview(text){
+  text = cleanEmptyLines(text);
+
+  const esc = escapeHtml(text);
+
+  const html = esc.split("\n").map(line =>
+    isMostlyChordLine(line)
+      ? `<div class="chordpro">${line}</div>`
+      : `<div>${line}</div>`
+  ).join("");
+
+  previewEl.innerHTML = html;
+}
+
+function updateUI(){
+  const text = editorEl.value || "";
+  const transposedText = cleanEmptyLines(transposeAll(text, currentSteps));
+
+  const tokens = extractChords(transposedText);
+  const possible = detectPossibleKeys(tokens);
+
+  document.getElementById("possibleKeys").innerHTML =
+    possible.length
+      ? possible.map(p=>`${p.key} (${p.score.toFixed(1)}%)`).join("<br>")
+      : "(ไม่พบคอร์ด)";
+
+  transposeDisplay.textContent = "Transpose: " + (currentSteps>=0?"+":"") + currentSteps;
+  stepsLabel.textContent = currentSteps + " semitones";
+  range.value = currentSteps;
+
+  renderPreview(transposedText);
+}
+
+
+editorEl.addEventListener("input", updateUI);
+
+document.getElementById("dec").onclick = ()=>{
+  currentSteps = Math.max(-12, currentSteps-1);
+  updateUI();
+};
+document.getElementById("inc").onclick = ()=>{
+  currentSteps = Math.min(12, currentSteps+1);
+  updateUI();
+};
+
+range.oninput = e=>{
+  currentSteps = parseInt(e.target.value);
+  updateUI();
+};
+
+/* KEY BUTTONS */
+const ALL_KEYS = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+const keyButtonsEl = document.getElementById("keyButtons");
+
+ALL_KEYS.forEach(k=>{
+  const b = document.createElement("button");
+  b.textContent = k;
+  b.className = "btn secondary";
+  b.style.padding = "6px 10px";
+
+  b.onclick = ()=>{
+    const tokens = extractChords(editorEl.value || "");
+    const possible = detectPossibleKeys(tokens);
+    const base = possible.length ? possible[0].key : "C";
+    currentSteps = semitoneDiff(base, k);
+    updateUI();
+  };
+
+  keyButtonsEl.appendChild(b);
+});
+
+/* ============================================================
+   EXPORT: TXT / DOC / PDF / PRINT
+   ============================================================ */
+
+document.getElementById("exportTxt").onclick = ()=>{
+  const transposed = transposeAll(editorEl.value, currentSteps);
+  const blob = new Blob([transposed], {type:"text/plain;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "song.txt";
+  a.click();
+};
+
+document.getElementById("exportDoc").onclick = ()=>{
+  const transposed = transposeAll(editorEl.value, currentSteps);
+
+  const html = `
+    <html><head><meta charset="utf-8"></head>
+    <body style="font-family:THSarabunNew;white-space:pre-wrap;">
+      <pre>${escapeHtml(transposed)}</pre>
+    </body></html>
+  `;
+
+  const blob = new Blob([html], {type:"application/msword"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "song.doc";
+  a.click();
+};
+
+document.getElementById("exportPdf").onclick = async ()=>{
+  const { jsPDF } = window.jspdf;
+
+  const transposed = transposeAll(editorEl.value, currentSteps);
+
+  const div = document.createElement("div");
+  div.style.padding = "20px";
+  div.style.background = "#fff";
+  div.style.width = "820px";
+  div.style.fontFamily = "THSarabunNew";
+  div.style.fontSize = "18px";
+
+  div.innerHTML =
+    `<pre style="white-space:pre-wrap;margin:0;">${escapeHtml(transposed)}</pre>`;
+
+  document.body.appendChild(div);
+
+  try {
+    const canvas = await html2canvas(div, {scale:2, backgroundColor:"#FFFFFF"});
+    const img = canvas.toDataURL("image/jpeg", 1.0);
+
+    const pdf = new jsPDF("p","pt","a4");
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const ratio = canvas.height / canvas.width;
+
+    pdf.addImage(img,"JPEG",0,0,pageWidth,pageWidth * ratio);
+    pdf.save("song.pdf");
+  } catch(e){
+    alert("เกิดข้อผิดพลาดระหว่างสร้าง PDF");
+  }
+
+  document.body.removeChild(div);
+};
+
+document.getElementById("printAsPdf").onclick = ()=>{
+  const transposed = transposeAll(editorEl.value, currentSteps);
+  const w = window.open("","_blank");
+
+  w.document.write(`
+    <html><head><meta charset="utf-8">
+    <style>
+      body { 
+        font-family: THSarabunNew; 
+        padding:20px; 
+        white-space:pre-wrap;
+        font-size:16px;
+      }
+    </style>
+    </head>
+    <body>${escapeHtml(transposed)}</body></html>
+  `);
+
+  w.document.close();
+  w.focus();
+  w.print();
+};
+
+/* ============================================================
+   MOBILE TABS
+   ============================================================ */
+
+function showSection(id){
+  ["songListSection","editorSection","previewSection"].forEach(x=>{
+    document.getElementById(x).classList.remove("show");
+  });
+
+  document.getElementById(id).classList.add("show");
+  window.scrollTo(0,0);
+}
+
+document.getElementById("tabList").onclick   = ()=> showSection('songListSection');
+document.getElementById("tabEditor").onclick = ()=> showSection('editorSection');
+document.getElementById("tabPreview").onclick= ()=> showSection('previewSection');
+
+/* ============================================================
+   INIT BOOT
+   ============================================================ */
+
+window.addEventListener('DOMContentLoaded', async ()=>{
+
+  await loadSongsJsonOnce();
+  renderSongList();
+
+  // search
+  document.getElementById('songSearch').addEventListener('input', e=>{
+    renderSongList(e.target.value);
+  });
+
+  document.getElementById('keySearch').addEventListener('change', ()=>{
+    renderSongList(document.getElementById('songSearch').value);
+  });
+
+  // sample
+  document.getElementById('loadSample').onclick = ()=>{
+    editorEl.value = `[ตัวอย่าง]
+C G Am F
+เนื้อเพลงตัวอย่าง`;
+    currentSteps = 0;
+    updateUI();
+  };
+
+  // save
+  document.getElementById('saveSong').onclick = ()=>{
+    const pass = prompt('กรุณากรอกรหัสเพื่อบันทึกเพลง ');
+    if(pass !== 'southhope'){ alert('รหัสไม่ถูกต้อง'); return; }
+
+    const title = prompt('ชื่อเพลง?');
+    if(!title) return;
+
+    const lyrics = editorEl.value || '';
+
+    const db = getDb();
+    db.songs.push({
+      id: uuidv4(),
+      title,
+      lyrics,
+      youtube:''
+    });
+
+    saveDb(db);
+    renderSongList();
+    alert('บันทึกเพลงแล้ว');
+  };
+
+  // clear
+  document.getElementById('clear').onclick = ()=>{
+    if(confirm('ล้างข้อความใน Editor?')){
+      editorEl.value = '';
+      currentSteps = 0;
+      updateUI();
+    }
+  };
+
+  // mobile default view
+  if(window.innerWidth <= 768){
+    showSection('editorSection');
+  } else {
+    document.getElementById('songListSection').classList.add('show');
+    document.getElementById('editorSection').classList.add('show');
+    document.getElementById('previewSection').classList.add('show');
+  }
+
+  updateUI();
+});
 </script>
+
 </body>
 </html>
