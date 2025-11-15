@@ -3,7 +3,10 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Smye worship - Transpose Chord (Mobile A)</title>
+<title>Smye worship - Transpose Chord (Firebase A)</title>
+
+<!-- Google font fallback: Sarabun (ใช้ชื่อ THSarabunNew เป็นหลัก) -->
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <!-- html2pdf / jspdf / html2canvas -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -11,43 +14,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
-
-/* ===========================
-   FONT: THSarabunNew
-   =========================== */
-@font-face {
-  font-family: 'THSarabunNew';
-  font-weight: 400;
-  font-style: normal;
-  src: url('THSarabunNew.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'THSarabunNew';
-  font-weight: 700;
-  font-style: normal;
-  src: url('THSarabunNew-Bold.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'THSarabunNew';
-  font-weight: 400;
-  font-style: italic;
-  src: url('THSarabunNew-Italic.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'THSarabunNew';
-  font-weight: 700;
-  font-style: italic;
-  src: url('THSarabunNew-BoldItalic.woff2') format('woff2');
-}
-
-/* apply everywhere */
-body, input, button, textarea, select, .output, .chordpro {
-  font-family:"THSarabunNew", sans-serif !important;
-}
-
-/* ===========================
-   THEME + LAYOUT
-   =========================== */
 :root{
   --bg:#f5f7fa;
   --card:#ffffff;
@@ -58,71 +24,50 @@ body, input, button, textarea, select, .output, .chordpro {
   --radius:10px;
   --text:#0f172a;
 }
+
+/* ใช้ชื่อฟอนต์หลัก THSarabunNew หากไม่มีจะ fallback ไป Sarabun/Tahoma */
+@font-face{
+  font-family: "THSarabunNew";
+  src: local("THSarabunNew"), local("Sarabun"), local("Tahoma");
+}
+
 *{box-sizing:border-box}
 body{
   margin:0;
+  font-family:"THSarabunNew", "Sarabun", "Tahoma", sans-serif;
   background:var(--bg);
   color:var(--text);
-  font-size:16px;
-  line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
 }
-
 .topbar{
-  max-width:1200px;
-  margin:12px auto;
-  padding:10px 14px;
-  background:#fff;
-  border-radius:10px;
-  border:1px solid var(--border);
-  display:flex;
-  align-items:center;
-  gap:12px;
+  max-width:1200px;margin:12px auto;padding:10px 14px;background:#fff;border-radius:10px;border:1px solid var(--border);display:flex;align-items:center;gap:12px;
 }
-h1{margin:0;font-size:20px;font-weight:700}
+h1{margin:0;font-size:18px}
+.container{max-width:1200px;margin:12px auto;padding:12px;display:grid;grid-template-columns:280px 1fr 1fr;gap:14px}
+.card{background:var(--card);border-radius:var(--radius);padding:14px;border:1px solid var(--border);box-shadow:0 6px 18px rgba(12,18,32,0.04)}
+/* sidebar */
+.sidebar-list-item{display:flex;gap:10px;padding:10px;border-bottom:1px solid var(--border);align-items:flex-start}
+.sidebar-list-item input{margin-top:6px}
+.title{font-weight:700;color:#0f172a}
+.youtube{font-size:12px;color:#475569;margin-top:4px}
+.actions{display:flex;flex-direction:column;gap:8px}
+.small{font-size:13px;color:var(--muted)}
+.pdf-note{font-size:12px;color:var(--muted);margin-top:8px}
 
-.container{
-  max-width:1200px;
-  margin:12px auto;
-  padding:12px;
-  display:grid;
-  grid-template-columns:280px 1fr 1fr;
-  gap:14px;
-}
-
-.card{
-  background:var(--card);
-  border-radius:var(--radius);
-  padding:14px;
-  border:1px solid var(--border);
-  box-shadow:0 6px 18px rgba(12,18,32,0.04);
-}
-
-/* sidebar list */
-.sidebar-list-item{
-  display:flex;
-  gap:10px;
-  padding:10px;
-  border-bottom:1px solid var(--border);
-  align-items:flex-start;
-}
-.sidebar-list-item input{ margin-top:6px }
-.title{ font-weight:700; color:#0f172a }
-.youtube{ font-size:13px; color:#475569; margin-top:4px }
-.actions{ display:flex; flex-direction:column; gap:8px }
-.small{ font-size:14px; color:var(--muted) }
-
-/* EDITOR + PREVIEW */
+/* editor & preview */
 textarea#editor{
   width:100%;
   height:420px;
-  padding:12px;
+  padding:10px;
   border-radius:8px;
   border:1px solid var(--border);
   background:#fff;
   resize:vertical;
-  font-family:"THSarabunNew", sans-serif !important;
-  font-size:16px;
-  line-height:1.55;
+  font-family:"THSarabunNew", "Sarabun", "Tahoma", sans-serif;
+  font-size:13px;
+  line-height:1.45;
+  color:var(--text);
 }
 
 .output{
@@ -132,67 +77,39 @@ textarea#editor{
   border:1px solid var(--border);
   background:#fff;
   overflow:auto;
+  font-family:"THSarabunNew", "Sarabun", "Tahoma", sans-serif;
+  font-size:13px;
+  line-height:1.45;
   white-space:pre-wrap;
-  font-family:"THSarabunNew", sans-serif !important;
-  font-size:16px;
-  line-height:1.55;
+  color:var(--text);
 }
 
+/* chord line */
 .chordpro{
-  font-family:"THSarabunNew", sans-serif !important;
-  font-size:16px;
+  font-family:"THSarabunNew", "Sarabun", "Tahoma", sans-serif;
+  font-size:13px;
   font-weight:700;
   color:var(--accent-dark);
 }
 
-.controls{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  align-items:center;
-  margin-top:10px;
-}
+.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.btn{padding:8px 12px;border-radius:8px;border:none;background:var(--accent);color:#fff;font-weight:700;cursor:pointer}
+.btn.secondary{background:#f3f4f6;color:var(--text);border:1px solid var(--border)}
+.key-buttons button{padding:6px 10px;border-radius:8px;border:1px solid var(--border);background:#f8fafc}
 
-.btn{
-  padding:8px 12px;
-  border-radius:8px;
-  border:none;
-  background:var(--accent);
-  color:#fff;
-  font-weight:700;
-  cursor:pointer;
-}
+.muted{color:var(--muted);font-size:13px}
 
-.btn.secondary{
-  background:#f3f4f6;
-  color:var(--text);
-  border:1px solid var(--border);
-}
+/* pdf list items */
+.pdf-item{display:flex;justify-content:space-between;align-items:center;padding:8px;border-bottom:1px solid var(--border)}
+.pdf-item .meta{font-size:13px;color:#374151}
 
-.key-buttons button{
-  padding:6px 10px;
-  border-radius:8px;
-  border:1px solid var(--border);
-  background:#f8fafc;
-}
-
-/* PDF list */
-.pdf-item{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:8px;
-  border-bottom:1px solid var(--border);
-}
-.pdf-item .meta{ font-size:13px; color:#374151 }
-
-/* responsive */
+/* responsive / mobile A */
 @media(max-width:980px){
   .container{grid-template-columns:1fr; padding:8px}
   .topbar{margin:8px;padding:8px}
 }
 
-/* MOBILE TABS */
+/* Mobile top tab (แบบ A) */
 .mobile-tabs{
   display:none;
   gap:8px;
@@ -201,12 +118,19 @@ textarea#editor{
   background:#fff;
   border-bottom:1px solid var(--border);
 }
-
 @media(max-width:768px){
   .mobile-tabs{display:flex; position:sticky; top:0; z-index:20}
-  #songListSection, #editorSection, #previewSection { display:none; }
-  #songListSection.show, #editorSection.show, #previewSection.show { display:block; }
-  #editorSection, #previewSection, #songListSection { min-height:60vh; }
+  /* hide all main sections by default; show by .show */
+  #songListSection, #editorSection, #previewSection {
+    display:none;
+  }
+  #songListSection.show, #editorSection.show, #previewSection.show {
+    display:block;
+  }
+  /* make editor and preview full height scrollable */
+  #editorSection, #previewSection, #songListSection {
+    min-height:60vh;
+  }
 }
 </style>
 </head>
@@ -214,8 +138,12 @@ textarea#editor{
 
 <div class="topbar">
   <h1>Smye worship - Transpose Chord</h1>
+  <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+    <div class="small" id="statusText" style="color:var(--muted)">Firestore: connecting…</div>
+  </div>
 </div>
 
+<!-- Mobile tabs (แบบ A) -->
 <div class="mobile-tabs" id="mobileTabs">
   <button id="tabList" class="btn secondary">📚 คลังเพลง</button>
   <button id="tabEditor" class="btn secondary">🎵 Editor</button>
@@ -223,43 +151,24 @@ textarea#editor{
 </div>
 
 <div class="container">
-<!-- (Part 2 จะเริ่มตรงนี้) -->
-  <!-- ============================
-       SONG LIST (SIDEBAR)
-  ============================ -->
+  <!-- SIDEBAR / SONG LIST -->
   <section id="songListSection" class="card">
     <div style="font-weight:700;margin-bottom:10px">🎵 คลังเพลงทั้งหมด</div>
 
-    <input id="songSearch" placeholder="ค้นหาเพลง..." 
-           style="width:100%;padding:8px;margin-bottom:10px;
-                  border:1px solid var(--border);border-radius:8px;
-                  font-family:'THSarabunNew',sans-serif;font-size:16px;">
+    <input id="songSearch" placeholder="ค้นหาเพลง..." style="width:100%;padding:8px;margin-bottom:10px;border:1px solid var(--border);border-radius:8px">
 
-    <select id="keySearch"
-            style="width:100%;padding:8px;margin-bottom:10px;
-                   border:1px solid var(--border);border-radius:8px;
-                   font-family:'THSarabunNew',sans-serif;font-size:16px;">
+    <select id="keySearch" style="width:100%;padding:8px;margin-bottom:10px;border:1px solid var(--border);border-radius:8px">
       <option value="">ค้นหาตามคีย์ (ทั้งหมด)</option>
-      <option value="C">C</option>
-      <option value="C#">C#</option>
-      <option value="D">D</option>
-      <option value="D#">D#</option>
-      <option value="E">E</option>
-      <option value="F">F</option>
-      <option value="F#">F#</option>
-      <option value="G">G</option>
-      <option value="G#">G#</option>
-      <option value="A">A</option>
-      <option value="A#">A#</option>
-      <option value="B">B</option>
+      <option value="C">C</option><option value="C#">C#</option><option value="D">D</option>
+      <option value="D#">D#</option><option value="E">E</option><option value="F">F</option>
+      <option value="F#">F#</option><option value="G">G</option><option value="G#">G#</option>
+      <option value="A">A</option><option value="A#">A#</option><option value="B">B</option>
     </select>
 
     <div id="songList"></div>
   </section>
 
-  <!-- ============================
-       EDITOR PANEL
-  ============================ -->
+  <!-- EDITOR -->
   <section id="editorSection" class="card">
     <div style="display:flex;justify-content:space-between;align-items:center">
       <div>
@@ -275,15 +184,12 @@ textarea#editor{
 
     <textarea id="editor" placeholder="วางเนื้อเพลง + คอร์ดที่นี่..."></textarea>
 
-
-    <!-- CONTROLS: transpose, key buttons -->
     <div class="controls">
       <button id="dec" class="btn secondary">−</button>
       <div id="transposeDisplay" style="font-weight:700">Transpose: 0</div>
       <button id="inc" class="btn secondary">+</button>
 
-      <input id="range" type="range" min="-12" max="12" value="0" 
-             style="width:160px">
+      <input id="range" type="range" min="-12" max="12" value="0" style="width:160px">
       <div id="stepsLabel" class="muted">0 semitones</div>
 
       <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
@@ -292,7 +198,6 @@ textarea#editor{
       </div>
     </div>
 
-    <!-- Export -->
     <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
       <button id="exportTxt" hidden class="btn secondary">Export .txt</button>
       <button id="exportDoc" class="btn secondary">Export .doc</button>
@@ -303,9 +208,7 @@ textarea#editor{
     <div id="searchResults" style="margin-top:10px"></div>
   </section>
 
-  <!-- ============================
-       PREVIEW PANEL
-  ============================ -->
+  <!-- PREVIEW -->
   <section id="previewSection" class="card">
     <div style="display:flex;justify-content:space-between;align-items:flex-start">
       <div>
@@ -322,268 +225,192 @@ textarea#editor{
   </section>
 </div>
 
+<!-- Firebase modular SDK via CDN (version can be adjusted) -->
+<script type="module">
+  // ----- Firebase config (จากที่คุณให้) -----
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+  import { getFirestore, collection, doc, addDoc, setDoc, getDocs, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
-
-<script>
-/* ============================================================
-   Utilities & Local Storage
-   ============================================================ */
-
-function escapeHtml(s){
-  return (s||'').toString().replace(/[&<>"']/g, m => ({
-    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-  }[m]));
-}
-
-function uuidv4(){
-  if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
-  return 'id_' + Date.now().toString(36) + Math.random().toString(36).slice(2,9);
-}
-
-function getDb(){
-  try {
-    return JSON.parse(localStorage.getItem('song_db_plain') || '{"songs":[],"pdfs":[]}');
-  } catch(e){
-    return { songs:[], pdfs:[] };
-  }
-}
-
-function saveDb(db){
-  localStorage.setItem('song_db_plain', JSON.stringify(db));
-}
-
-/* ============================================================
-   Load songs.json (once)
-   ============================================================ */
-async function loadSongsJsonOnce(){
-  const flagKey = '__songs_json_loaded__';
-  if(localStorage.getItem(flagKey)) return;
-
-  try{
-    const resp = await fetch('./songs.json', {cache:'no-store'});
-    if(!resp.ok) return;
-
-    const json = await resp.json();
-    const arr = Array.isArray(json) ? json :
-                (json && Array.isArray(json.songs) ? json.songs : []);
-
-    const db = getDb();
-    db.songs = db.songs || [];
-
-    const seen = new Set(db.songs.map(s => (s.title||'').toLowerCase().trim()));
-
-    let added = 0;
-    arr.forEach(s=>{
-      if(!s || !s.title) return;
-      const key = s.title.toLowerCase().trim();
-      if(seen.has(key)) return;
-
-      db.songs.push({
-        id: s.id || uuidv4(),
-        title: s.title,
-        lyrics: s.lyrics || s.text || s.body || '',
-        youtube: s.youtube || ''
-      });
-
-      seen.add(key);
-      added++;
-    });
-
-    if(added>0) saveDb(db);
-    localStorage.setItem(flagKey, '1');
-  }catch(e){}
-}
-
-/* ============================================================
-   CHORD ENGINE — transpose / detect keys
-   ============================================================ */
-
-const SHARP = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
-const FLATMAP = {"Db":"C#","Eb":"D#","Gb":"F#","Ab":"G#","Bb":"A#"};
-const NOTE_TO_INDEX = {};
-SHARP.forEach((n,i)=> NOTE_TO_INDEX[n] = i);
-
-function normNote(n){
-  if(!n) return n;
-  return (FLATMAP[n] || n).toUpperCase();
-}
-
-function isChordToken(tok){
-  if(!tok) return false;
-  let t = tok.trim().replace(/^[({\[]+|[)}\].,:!?]+$/g,"");
-  if(/^(intro|verse|chorus|bridge|outro|pre-chorus|prechorus)$/i.test(t))
-    return false;
-
-  return /^[A-G](#|b)?(m|min|maj|dim|aug|sus\d*|add\d*|maj7|m7|7|9|11|13)?(\/[A-G](#|b)?)?$/i
-    .test(t);
-}
-
-function transposeRoot(root, steps){
-  const base = normNote(root);
-  const idx = NOTE_TO_INDEX[base];
-  if(idx === undefined) return root;
-  return SHARP[(idx + steps + 12) % 12];
-}
-
-function transposeChordToken(tok, steps){
-  const m = tok.match(/^([A-G](#|b)?)(.*?)(?:\/([A-G](#|b)?))?$/);
-  if(!m) return tok;
-
-  const root = m[1];
-  const mod  = m[3] || "";
-  const bass = m[4] || "";
-
-  const nr = transposeRoot(root, steps);
-  const nb = bass ? transposeRoot(bass, steps) : "";
-
-  return nb ? nr + mod + "/" + nb : nr + mod;
-}
-
-function processTokens(parts, steps){
-  return parts.map(p=>{
-    if(/^\s+$/.test(p)) return p;
-    return isChordToken(p) ? transposeChordToken(p, steps) : p;
-  }).join('');
-}
-
-function isMostlyChordLine(line){
-  const toks = line.trim().split(/\s+/).filter(Boolean);
-  if(toks.length === 0) return false;
-  let c = 0;
-  toks.forEach(t=>{ if(isChordToken(t)) c++; });
-  return (c / toks.length) >= 0.5;
-}
-
-function transposeAll(text, steps){
-  const out = [];
-  const lines = text.replace(/\r/g,'').split("\n");
-  for(const line of lines){
-    if(line.trim()===""){
-      out.push("");
-      continue;
-    }
-    out.push(processTokens(line.split(/(\s+)/), steps));
-  }
-  return out.join("\n");
-}
-
-function extractChords(text){
-  const set = new Set();
-  text.split("\n").forEach(line=>{
-    line.split(/(\s+)/).forEach(tok=>{
-      if(isChordToken(tok)) set.add(tok.trim());
-    });
-  });
-  return [...set];
-}
-
-function detectPossibleKeys(tokens){
-  const MAJOR = {
-    "C":["C","Dm","Em","F","G","Am","Bdim"],
-    "C#":["C#","D#m","Fm","F#","G#","A#m","Cdim"],
-    "D":["D","Em","F#m","G","A","Bm","C#dim"],
-    "D#":["D#","Fm","Gm","G#","A#","Cm","Ddim"],
-    "E":["E","F#m","G#m","A","B","C#m","D#dim"],
-    "F":["F","Gm","Am","A#","C","Dm","Edim"],
-    "F#":["F#","G#m","A#m","B","C#","D#m","Fdim"],
-    "G":["G","Am","Bm","C","D","Em","F#dim"],
-    "G#":["G#","A#m","Cm","C#","D#","Fm","Gdim"],
-    "A":["A","Bm","C#m","D","E","F#m","G#dim"],
-    "A#":["A#","Cm","Dm","D#","F","Gm","Adim"],
-    "B":["B","C#m","D#m","E","F#","G#m","A#dim"]
+  const firebaseConfig = {
+    apiKey: "AIzaSyC6yiFKFtyt69YWhlQ5GK3MsUgGrKU4c5w",
+    authDomain: "smye-worship.firebaseapp.com",
+    projectId: "smye-worship",
+    storageBucket: "smye-worship.firebasestorage.app",
+    messagingSenderId: "31357469768",
+    appId: "1:31357469768:web:9e21798d7adbb6eeadc47d",
+    measurementId: "G-JLZCZCMN53"
   };
 
-  const roots = tokens.map(t=>{
-    const m = t.match(/^([A-G](#|b)?)(m|min|maj)?/i);
-    if(!m) return null;
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-    const base = normNote(m[1]);
-    const type = (m[3] || "").toLowerCase();
+  // ----- Utilities -----
+  function escapeHtml(s){ return (s||'').toString().replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+  function uuidv4(){ if(window.crypto && crypto.randomUUID) return crypto.randomUUID(); return 'id_' + Date.now().toString(36) + Math.random().toString(36).slice(2,9); }
 
-    return (base + type).replace("maj","");
-  }).filter(Boolean);
+  // ----- Chord engine (same as before) -----
+  const SHARP = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+  const FLATMAP = {"Db":"C#","Eb":"D#","Gb":"F#","Ab":"G#","Bb":"A#"};
+  const NOTE_TO_INDEX = {}; SHARP.forEach((n,i)=> NOTE_TO_INDEX[n] = i);
 
-  if(!roots.length) return [];
+  function normNote(n){ if(!n) return n; return (FLATMAP[n] || n).toUpperCase(); }
+  function isChordToken(tok){
+    if(!tok) return false;
+    let t = tok.trim().replace(/^[({\[]+|[)}\].,:!?]+$/g,"");
+    if(/^(intro|verse|chorus|bridge|outro|pre-chorus|prechorus)$/i.test(t)) return false;
+    return /^[A-G](#|b)?(m|min|maj|dim|aug|sus\d*|add\d*|maj7|m7|7|9|11|13)?(\/[A-G](#|b)?)?$/i.test(t);
+  }
+  function transposeRoot(root, steps){ const base = normNote(root); const idx = NOTE_TO_INDEX[base]; if(idx===undefined) return root; return SHARP[(idx+steps+12)%12]; }
+  function transposeChordToken(tok, steps){
+    const m = tok.match(/^([A-G](#|b)?)(.*?)(?:\/([A-G](#|b)?))?$/);
+    if(!m) return tok;
+    const root = m[1]; const mod = m[3] || ""; const bass = m[4] || "";
+    const nr = transposeRoot(root, steps); const nb = bass ? transposeRoot(bass, steps) : "";
+    return nb ? nr + mod + "/" + nb : nr + mod;
+  }
+  function processTokens(parts, steps){ return parts.map(p=>{ if(/^\s+$/.test(p)) return p; return isChordToken(p) ? transposeChordToken(p, steps) : p; }).join(''); }
+  function isMostlyChordLine(line){ const toks = line.trim().split(/\s+/).filter(Boolean); if(toks.length===0) return false; let c=0; toks.forEach(t=>{ if(isChordToken(t)) c++; }); return (c/toks.length)>=0.5; }
+  function transposeAll(text, steps){
+    const out=[]; const lines = text.replace(/\r/g,'').split("\n");
+    for(const line of lines){ if(line.trim()===""){ out.push(""); continue; } out.push(processTokens(line.split(/(\s+)/), steps)); }
+    return out.join("\n");
+  }
+  function extractChords(text){
+    const set = new Set();
+    text.split("\n").forEach(line=>{ line.split(/(\s+)/).forEach(tok=>{ if(isChordToken(tok)) set.add(tok.trim()); }); });
+    return [...set];
+  }
+  function detectPossibleKeys(tokens){
+    const MAJOR = {"C":["C","Dm","Em","F","G","Am","Bdim"],"C#":["C#","D#m","Fm","F#","G#","A#m","Cdim"],"D":["D","Em","F#m","G","A","Bm","C#dim"],"D#":["D#","Fm","Gm","G#","A#","Cm","Ddim"],"E":["E","F#m","G#m","A","B","C#m","D#dim"],"F":["F","Gm","Am","A#","C","Dm","Edim"],"F#":["F#","G#m","A#m","B","C#","D#m","Fdim"],"G":["G","Am","Bm","C","D","Em","F#dim"],"G#":["G#","A#m","Cm","C#","D#","Fm","Gdim"],"A":["A","Bm","C#m","D","E","F#m","G#dim"],"A#":["A#","Cm","Dm","D#","F","Gm","Adim"],"B":["B","C#m","D#m","E","F#","G#m","A#dim"]};
+    const roots = tokens.map(t=>{ const m = t.match(/^([A-G](#|b)?)(m|min|maj)?/i); if(!m) return null; const base = normNote(m[1]); const type = (m[3]||"").toLowerCase(); return (base + type).replace("maj",""); }).filter(Boolean);
+    if(!roots.length) return [];
+    let list=[];
+    Object.keys(MAJOR).forEach(key=>{ const allowed = MAJOR[key]; const match = roots.filter(r=>allowed.includes(r)).length; const score = (match/roots.length)*100; if(score>0) list.push({key,score}); });
+    return list.sort((a,b)=>b.score-a.score).slice(0,3);
+  }
+  function semitoneDiff(from,to){ const f=NOTE_TO_INDEX[normNote(from)]; const t=NOTE_TO_INDEX[normNote(to)]; if(f===undefined||t===undefined) return 0; return (t-f+12)%12; }
 
-  let list = [];
-  Object.keys(MAJOR).forEach(key=>{
-    const allowed = MAJOR[key];
-    const match = roots.filter(r=>allowed.includes(r)).length;
-    const score = (match / roots.length) * 100;
-    if(score > 0) list.push({ key, score });
-  });
+  // ----- DOM refs -----
+  const editorEl = document.getElementById("editor");
+  const previewEl = document.getElementById("preview");
+  const transposeDisplay = document.getElementById("transposeDisplay");
+  const stepsLabel = document.getElementById("stepsLabel");
+  const range = document.getElementById("range");
+  const statusText = document.getElementById("statusText");
+  let currentSteps = 0;
 
-  return list.sort((a,b)=>b.score - a.score).slice(0,3);
-}
+  // ----- Firestore collection -----
+  const songsCol = collection(db, "songs");
 
-function semitoneDiff(from, to){
-  const f = NOTE_TO_INDEX[normNote(from)];
-  const t = NOTE_TO_INDEX[normNote(to)];
-  if(f===undefined || t===undefined) return 0;
-  return (t - f + 12) % 12;
-}
+  // local cache
+  let songsCache = [];
 
-/* ============================================================
-   RENDER SONG LIST
-   ============================================================ */
-
-function renderSongList(filter=''){
-  const db = getDb();
-  db.songs = db.songs || [];
-
-  const q = (filter||'').toLowerCase().trim();
-  const keyFilter = (document.getElementById("keySearch") || {}).value || "";
-  const box = document.getElementById('songList');
-
-  const list = db.songs.filter(s=>{
-    const lyrics = s.lyrics || "";
-
-    const tokens = extractChords(lyrics);
-    const possible = detectPossibleKeys(tokens);
-    const songKey = possible.length ? possible[0].key : "";
-
-    const matchText = (s.title||"").toLowerCase().includes(q) ||
-                      lyrics.toLowerCase().includes(q);
-
-    const matchKey = keyFilter==="" || keyFilter===songKey;
-
-    return matchText && matchKey;
-  });
-
-  if(!list.length){
-    box.innerHTML = '<div class="small">ไม่พบเพลง</div>';
-    return;
+  // ----- Load songs from Firestore in realtime -----
+  function subscribeSongsRealtime(){
+    try{
+      onSnapshot(songsCol, snap => {
+        songsCache = [];
+        snap.forEach(docSnap=>{
+          const data = docSnap.data();
+          songsCache.push(Object.assign({ id: docSnap.id }, data));
+        });
+        renderSongList();
+        statusText.textContent = `Firestore: connected • ${songsCache.length} songs`;
+      }, err => {
+        console.error('snapshot err', err);
+        statusText.textContent = 'Firestore: error';
+      });
+    }catch(e){
+      console.error(e);
+      statusText.textContent = 'Firestore: failed to subscribe';
+    }
   }
 
-  box.innerHTML = list.map(s=>{
-    const lyrics = s.lyrics || "";
-    const tokens = extractChords(lyrics);
-    const possible = detectPossibleKeys(tokens);
-    const songKey = possible.length ? possible[0].key : "-";
+  // ----- Add song (require password) -----
+  async function addSongToFirestore(title, lyrics, youtube = ''){
+    try{
+      const payload = {
+        title: title || ('Untitled ' + Date.now()),
+        lyrics: lyrics || '',
+        youtube: youtube || '',
+        createdAt: Date.now()
+      };
+      await addDoc(songsCol, payload);
+      alert('บันทึกเพลงเรียบร้อย');
+    }catch(e){
+      console.error(e); alert('บันทึกผิดพลาด: '+e.message);
+    }
+  }
 
-    const sampleLines = lyrics
-      .split("\n")
-      .slice(0,2)
-      .map(line=>escapeHtml(line))
-      .join("<br>");
+  // ----- Delete song by doc id (require password) -----
+  async function deleteSongFromFirestore(id){
+    try{
+      await deleteDoc(doc(db, "songs", id));
+      alert('ลบเรียบร้อย');
+    }catch(e){
+      console.error(e); alert('ลบผิดพลาด: '+e.message);
+    }
+  }
 
-    return `
+  // ----- Render functions (with blank-line collapse for preview) -----
+  function collapseBlankLines(text){
+    // trim ends, replace 3+ blank lines with single blank line, also collapse 2+ to single
+    return text.replace(/\r/g,'').split('\n')
+      .map(line => line.replace(/\s+$/,''))
+      .join('\n')
+      .replace(/\n{2,}/g, '\n\n')
+      .replace(/^\s*\n/, '')   // leading blank
+      .replace(/\n\s*$/, '');  // trailing blank
+  }
+
+  function renderPreview(text){
+    // remove extra blank lines first
+    const cleaned = collapseBlankLines(text);
+    // escape + render chords in bold color
+    const esc = escapeHtml(cleaned);
+    const html = esc.split("\n").map(line =>
+      isMostlyChordLine(line)
+        ? `<div class="chordpro">${line}</div>`
+        : escapeHtml(line)
+    ).join("\n");
+    previewEl.innerHTML = html;
+  }
+
+  function renderSongList(filter=''){
+    const q = (filter||'').toLowerCase().trim();
+    const keyFilterEl = document.getElementById("keySearch");
+    const keyFilter = keyFilterEl ? keyFilterEl.value : "";
+    const box = document.getElementById('songList');
+    const list = songsCache.filter(s=>{
+      const lyrics = s.lyrics || "";
+      const tokens = extractChords(lyrics);
+      const possible = detectPossibleKeys(tokens);
+      const songKey = possible.length ? possible[0].key : "";
+      const matchText = (s.title||"").toLowerCase().includes(q) || lyrics.toLowerCase().includes(q);
+      const matchKey = keyFilter === "" || songKey === keyFilter;
+      return matchText && matchKey;
+    });
+
+    if(!list.length){
+      box.innerHTML = '<div class="small">ไม่พบเพลง</div>';
+      return;
+    }
+
+    box.innerHTML = list.map(s=>{
+      const lyrics = s.lyrics || "";
+      const sampleLines = lyrics.split("\n").slice(0,2).map(line => escapeHtml(line)).join("<br>");
+      const tokens = extractChords(lyrics);
+      const possible = detectPossibleKeys(tokens);
+      const songKey = possible.length ? possible[0].key : "-";
+      return `
       <div class="sidebar-list-item" data-id="${s.id}">
         <input type="checkbox" class="song-check" value="${s.id}">
         <div style="flex:1">
           <div class="title">${escapeHtml(s.title)}</div>
-
-          <div class="small" style="font-size:13px;color:#0ea5e9;margin-top:2px;">
-            Key: ${songKey}
-          </div>
-
+          <div class="small" style="font-size:12px;color:#0ea5e9;margin-top:2px;">Key: ${songKey}</div>
           ${s.youtube ? `<div class="youtube">${escapeHtml(s.youtube)}</div>` : ""}
-
-          <div class="small" style="margin-top:4px;color:#6b7280;font-size:13px;">
-            ${sampleLines}
-          </div>
+          <div class="small" style="margin-top:4px;color:#6b7280;font-size:12px;">${sampleLines}</div>
         </div>
-
         <div class="actions">
           <button class="btn secondary insert-btn" data-id="${s.id}">แทรก</button>
           <button class="btn secondary load-btn" data-id="${s.id}">โหลด</button>
@@ -591,371 +418,199 @@ function renderSongList(filter=''){
         </div>
       </div>
     `;
-  }).join('');
+    }).join('');
 
-  // BIND events
-  Array.from(box.querySelectorAll('.insert-btn')).forEach(b=>{
-    b.onclick = ()=> insertSongToEditor(b.dataset.id);
-  });
-  Array.from(box.querySelectorAll('.load-btn')).forEach(b=>{
-    b.onclick = ()=> loadSong(b.dataset.id);
-  });
-  Array.from(box.querySelectorAll('.delete-btn')).forEach(b=>{
-    b.onclick = ()=>{
-      if(confirm('ลบเพลงนี้?')) deleteSong(b.dataset.id);
-    };
-  });
-}
-
-/* ============================================================
-   INSERT / LOAD / DELETE SONG
-   ============================================================ */
-
-function insertSongToEditor(id){
-  const db = getDb();
-  const s = (db.songs||[]).find(x=>x.id===id);
-  if(!s){ alert('ไม่พบเพลง'); return; }
-
-  const txt = `\n————————————\n${s.title}\n${s.youtube?('YouTube: '+s.youtube+'\n'):''}${s.lyrics}\n————————————\n\n`;
-
-  const ta = document.getElementById('editor');
-
-  if(document.activeElement === ta){
-    const start = ta.selectionStart, end = ta.selectionEnd;
-    ta.value = ta.value.slice(0,start) + txt + ta.value.slice(end);
-    ta.setSelectionRange(start + txt.length, start + txt.length);
-  } else {
-    if(ta.value && !ta.value.endsWith('\n')) ta.value += '\n';
-    ta.value += txt;
+    // bind
+    Array.from(box.querySelectorAll('.insert-btn')).forEach(b=> b.onclick = ()=> insertSongToEditor(b.dataset.id));
+    Array.from(box.querySelectorAll('.load-btn')).forEach(b=> b.onclick = ()=> loadSong(b.dataset.id));
+    Array.from(box.querySelectorAll('.delete-btn')).forEach(b=> b.onclick = ()=> {
+      if(!confirm('ลบเพลงนี้?')) return;
+      const pass = prompt('กรุณากรอกรหัสเพื่อยืนยันการลบ ');
+      if(pass !== 'southhope'){ alert('รหัสไม่ถูกต้อง'); return; }
+      deleteSongFromFirestore(b.dataset.id);
+    });
   }
 
-  updateUI();
-
-  // สำหรับมือถือ → สลับไป Editor ให้อัตโนมัติ
-  if(window.innerWidth <= 768){
-    showSection('editorSection');
-  }
-}
-
-function loadSong(id){
-  const db = getDb();
-  const s = (db.songs||[]).find(x=>x.id===id);
-  if(!s) return;
-
-  const ta = document.getElementById('editor');
-  ta.value = s.lyrics || '';
-
-  currentSteps = 0;
-  updateUI();
-
-  // show YouTube link in preview
-  if(s.youtube){
-    const prev = document.getElementById('preview');
-    prev.innerHTML = 
-      `<div style="color:#0284c7;margin-bottom:10px">
-         🎵 YouTube: <a href="${s.youtube}" target="_blank">${s.youtube}</a>
-       </div>` 
-      + prev.innerHTML;
-  }
-
-  if(window.innerWidth <= 768){
-    showSection('editorSection');
-  }
-}
-
-function deleteSong(id){
-  const pass = prompt('กรุณากรอกรหัสเพื่อยืนยันการลบ ');
-  if(pass !== 'southhope'){
-    alert('รหัสไม่ถูกต้อง');
-    return;
-  }
-  const db = getDb();
-  db.songs = (db.songs||[]).filter(s=>s.id !== id);
-  saveDb(db);
-  renderSongList(document.getElementById('songSearch').value);
-}
-
-/* ============================================================
-   PREVIEW + UPDATE UI
-   ============================================================ */
-
-const editorEl = document.getElementById("editor");
-const previewEl = document.getElementById("preview");
-const transposeDisplay = document.getElementById("transposeDisplay");
-const stepsLabel = document.getElementById("stepsLabel");
-const range = document.getElementById("range");
-let currentSteps = 0;
-
-
-
-function cleanEmptyLines(text){
-  const lines = text.replace(/\r/g, "").split("\n");
-
-  let result = [];
-  let empty = false;
-
-  for(let line of lines){
-    if(line.trim() === ""){
-      if(!empty){
-        result.push(""); // อนุญาตแค่ 1 บรรทัด
-        empty = true;
-      }
+  // Insert / load functions
+  function insertSongToEditor(id){
+    const s = songsCache.find(x=>x.id===id);
+    if(!s){ alert('ไม่พบเพลง'); return; }
+    const txt = `\n————————————\n${s.title}\n${s.youtube?('YouTube: '+s.youtube+'\n'):''}${s.lyrics}\n————————————\n\n`;
+    const ta = editorEl;
+    if(document.activeElement === ta){
+      const start = ta.selectionStart, end = ta.selectionEnd;
+      ta.value = ta.value.slice(0,start) + txt + ta.value.slice(end);
+      ta.setSelectionRange(start + txt.length, start + txt.length);
     } else {
-      result.push(line);
-      empty = false;
+      if(ta.value && !ta.value.endsWith('\n')) ta.value += '\n';
+      ta.value += txt;
     }
-  }
-  return result.join("\n");
-}
-
-
-
-function renderPreview(text){
-  text = cleanEmptyLines(text);
-
-  const esc = escapeHtml(text);
-
-  const html = esc.split("\n").map(line =>
-    isMostlyChordLine(line)
-      ? `<div class="chordpro">${line}</div>`
-      : `<div>${line}</div>`
-  ).join("");
-
-  previewEl.innerHTML = html;
-}
-
-function updateUI(){
-  const text = editorEl.value || "";
-  const transposedText = cleanEmptyLines(transposeAll(text, currentSteps));
-
-  const tokens = extractChords(transposedText);
-  const possible = detectPossibleKeys(tokens);
-
-  document.getElementById("possibleKeys").innerHTML =
-    possible.length
-      ? possible.map(p=>`${p.key} (${p.score.toFixed(1)}%)`).join("<br>")
-      : "(ไม่พบคอร์ด)";
-
-  transposeDisplay.textContent = "Transpose: " + (currentSteps>=0?"+":"") + currentSteps;
-  stepsLabel.textContent = currentSteps + " semitones";
-  range.value = currentSteps;
-
-  renderPreview(transposedText);
-}
-
-
-editorEl.addEventListener("input", updateUI);
-
-document.getElementById("dec").onclick = ()=>{
-  currentSteps = Math.max(-12, currentSteps-1);
-  updateUI();
-};
-document.getElementById("inc").onclick = ()=>{
-  currentSteps = Math.min(12, currentSteps+1);
-  updateUI();
-};
-
-range.oninput = e=>{
-  currentSteps = parseInt(e.target.value);
-  updateUI();
-};
-
-/* KEY BUTTONS */
-const ALL_KEYS = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
-const keyButtonsEl = document.getElementById("keyButtons");
-
-ALL_KEYS.forEach(k=>{
-  const b = document.createElement("button");
-  b.textContent = k;
-  b.className = "btn secondary";
-  b.style.padding = "6px 10px";
-
-  b.onclick = ()=>{
-    const tokens = extractChords(editorEl.value || "");
-    const possible = detectPossibleKeys(tokens);
-    const base = possible.length ? possible[0].key : "C";
-    currentSteps = semitoneDiff(base, k);
     updateUI();
+    if(window.innerWidth <= 768) showSection('editorSection');
+  }
+
+  function loadSong(id){
+    const s = songsCache.find(x=>x.id===id);
+    if(!s) return;
+    editorEl.value = s.lyrics || '';
+    currentSteps = 0; updateUI();
+    if(s.youtube){
+      previewEl.innerHTML = `<div style="color:${getComputedStyle(document.documentElement).getPropertyValue('--accent') || '#0ea5e9'};margin-bottom:10px">🎵 YouTube: <a href="${s.youtube}" target="_blank">${s.youtube}</a></div>` + previewEl.innerHTML;
+    }
+    if(window.innerWidth <= 768) showSection('editorSection');
+  }
+
+  // ----- UI update & bindings -----
+  function updateUI(){
+    const text = editorEl.value || "";
+    const transposedText = transposeAll(text, currentSteps);
+    const tokens = extractChords(transposedText);
+    const possible = detectPossibleKeys(tokens);
+    document.getElementById("possibleKeys").innerHTML =
+      possible.length ? possible.map(p=>`${p.key} (${p.score.toFixed(1)}%)`).join("<br>") : "(ไม่พบคอร์ด)";
+    transposeDisplay.textContent = "Transpose: " + (currentSteps>=0?"+":"") + currentSteps;
+    stepsLabel.textContent = currentSteps + " semitones";
+    range.value = currentSteps;
+    renderPreview(transposedText);
+  }
+
+  editorEl.addEventListener("input", updateUI);
+
+  document.getElementById("dec").onclick = ()=>{
+    currentSteps = Math.max(-12, currentSteps-1); updateUI();
+  };
+  document.getElementById("inc").onclick = ()=>{
+    currentSteps = Math.min(12, currentSteps+1); updateUI();
+  };
+  range.oninput = e=>{ currentSteps = parseInt(e.target.value); updateUI(); };
+
+  const ALL_KEYS = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+  const keyButtonsEl = document.getElementById("keyButtons");
+  ALL_KEYS.forEach(k=>{
+    const b = document.createElement("button");
+    b.textContent = k; b.className = "btn secondary"; b.style.padding = "6px 10px";
+    b.onclick = ()=>{
+      const tokens = extractChords(editorEl.value || "");
+      const possible = detectPossibleKeys(tokens);
+      const base = possible.length ? possible[0].key : "C";
+      currentSteps = semitoneDiff(base, k);
+      updateUI();
+    };
+    keyButtonsEl.appendChild(b);
+  });
+
+  // ----- Exports (use transposed text) -----
+  document.getElementById("exportTxt").onclick = ()=>{
+    const transposed = transposeAll(editorEl.value, currentSteps);
+    const blob = new Blob([transposed], {type:"text/plain;charset=utf-8"});
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "song.txt"; a.click();
   };
 
-  keyButtonsEl.appendChild(b);
-});
+  document.getElementById("exportDoc").onclick = ()=>{
+    const transposed = transposeAll(editorEl.value, currentSteps);
+    const html = `<html><head><meta charset="utf-8"></head><body><pre style="font-family:THSarabunNew, Sarabun, Tahoma; white-space:pre-wrap;">${escapeHtml(transposed)}</pre></body></html>`;
+    const blob = new Blob([html], {type:"application/msword"});
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "song.doc"; a.click();
+  };
 
-/* ============================================================
-   EXPORT: TXT / DOC / PDF / PRINT
-   ============================================================ */
+  document.getElementById("exportPdf").onclick = async ()=>{
+    const { jsPDF } = window.jspdf;
+    const transposed = transposeAll(editorEl.value, currentSteps);
+    const div = document.createElement("div"); div.style.padding="20px"; div.style.background="#fff"; div.style.width="820px";
+    div.innerHTML = `<div style="font-family:THSarabunNew, Sarabun, Tahoma; font-size:14px;"><pre style="white-space:pre-wrap; margin:0;">${escapeHtml(transposed)}</pre></div>`;
+    document.body.appendChild(div);
+    try {
+      const canvas = await html2canvas(div, {scale:2, backgroundColor:"#FFFFFF"});
+      const img = canvas.toDataURL("image/jpeg", 1.0);
+      const pdf = new jsPDF("p","pt","a4");
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const ratio = canvas.height / canvas.width;
+      pdf.addImage(img,"JPEG",0,0,pageWidth,pageWidth * ratio);
+      pdf.save("song.pdf");
+    } catch(e){
+      console.error(e); alert("เกิดข้อผิดพลาดระหว่างสร้าง PDF");
+    }
+    document.body.removeChild(div);
+  };
 
-document.getElementById("exportTxt").onclick = ()=>{
-  const transposed = transposeAll(editorEl.value, currentSteps);
-  const blob = new Blob([transposed], {type:"text/plain;charset=utf-8"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "song.txt";
-  a.click();
-};
+  document.getElementById("printAsPdf").onclick = ()=>{
+    const transposed = transposeAll(editorEl.value, currentSteps);
+    const w = window.open("","_blank");
+    w.document.write(`<html><head><meta charset="utf-8"><style>body{font-family:THSarabunNew, Sarabun, Tahoma;padding:20px;white-space:pre-wrap;}</style></head><body>${escapeHtml(transposed)}</body></html>`);
+    w.document.close(); w.focus(); w.print();
+  };
 
-document.getElementById("exportDoc").onclick = ()=>{
-  const transposed = transposeAll(editorEl.value, currentSteps);
+  // ----- Init / UI boot -----
+  window.addEventListener('DOMContentLoaded', async ()=>{
+    // subscribe to songs
+    subscribeSongsRealtime();
 
-  const html = `
-    <html><head><meta charset="utf-8"></head>
-    <body style="font-family:THSarabunNew;white-space:pre-wrap;">
-      <pre>${escapeHtml(transposed)}</pre>
-    </body></html>
-  `;
+    // search inputs
+    document.getElementById('songSearch').addEventListener('input', e=>{
+      renderSongList(e.target.value);
+    });
+    document.getElementById('keySearch').addEventListener('change', ()=> renderSongList(document.getElementById('songSearch').value) );
 
-  const blob = new Blob([html], {type:"application/msword"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "song.doc";
-  a.click();
-};
-
-document.getElementById("exportPdf").onclick = async ()=>{
-  const { jsPDF } = window.jspdf;
-
-  const transposed = transposeAll(editorEl.value, currentSteps);
-
-  const div = document.createElement("div");
-  div.style.padding = "20px";
-  div.style.background = "#fff";
-  div.style.width = "820px";
-  div.style.fontFamily = "THSarabunNew";
-  div.style.fontSize = "18px";
-
-  div.innerHTML =
-    `<pre style="white-space:pre-wrap;margin:0;">${escapeHtml(transposed)}</pre>`;
-
-  document.body.appendChild(div);
-
-  try {
-    const canvas = await html2canvas(div, {scale:2, backgroundColor:"#FFFFFF"});
-    const img = canvas.toDataURL("image/jpeg", 1.0);
-
-    const pdf = new jsPDF("p","pt","a4");
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const ratio = canvas.height / canvas.width;
-
-    pdf.addImage(img,"JPEG",0,0,pageWidth,pageWidth * ratio);
-    pdf.save("song.pdf");
-  } catch(e){
-    alert("เกิดข้อผิดพลาดระหว่างสร้าง PDF");
-  }
-
-  document.body.removeChild(div);
-};
-
-document.getElementById("printAsPdf").onclick = ()=>{
-  const transposed = transposeAll(editorEl.value, currentSteps);
-  const w = window.open("","_blank");
-
-  w.document.write(`
-    <html><head><meta charset="utf-8">
-    <style>
-      body { 
-        font-family: THSarabunNew; 
-        padding:20px; 
-        white-space:pre-wrap;
-        font-size:16px;
-      }
-    </style>
-    </head>
-    <body>${escapeHtml(transposed)}</body></html>
-  `);
-
-  w.document.close();
-  w.focus();
-  w.print();
-};
-
-/* ============================================================
-   MOBILE TABS
-   ============================================================ */
-
-function showSection(id){
-  ["songListSection","editorSection","previewSection"].forEach(x=>{
-    document.getElementById(x).classList.remove("show");
-  });
-
-  document.getElementById(id).classList.add("show");
-  window.scrollTo(0,0);
-}
-
-document.getElementById("tabList").onclick   = ()=> showSection('songListSection');
-document.getElementById("tabEditor").onclick = ()=> showSection('editorSection');
-document.getElementById("tabPreview").onclick= ()=> showSection('previewSection');
-
-/* ============================================================
-   INIT BOOT
-   ============================================================ */
-
-window.addEventListener('DOMContentLoaded', async ()=>{
-
-  await loadSongsJsonOnce();
-  renderSongList();
-
-  // search
-  document.getElementById('songSearch').addEventListener('input', e=>{
-    renderSongList(e.target.value);
-  });
-
-  document.getElementById('keySearch').addEventListener('change', ()=>{
-    renderSongList(document.getElementById('songSearch').value);
-  });
-
-  // sample
-  document.getElementById('loadSample').onclick = ()=>{
-    editorEl.value = `[ตัวอย่าง]
+    // sample / save / clear
+    document.getElementById('loadSample').onclick = ()=>{
+      editorEl.value = `[ตัวอย่าง]
 C G Am F
 เนื้อเพลงตัวอย่าง`;
-    currentSteps = 0;
-    updateUI();
-  };
+      currentSteps = 0; updateUI();
+    };
 
-  // save
-  document.getElementById('saveSong').onclick = ()=>{
-    const pass = prompt('กรุณากรอกรหัสเพื่อบันทึกเพลง ');
-    if(pass !== 'southhope'){ alert('รหัสไม่ถูกต้อง'); return; }
+    document.getElementById('saveSong').onclick = async ()=>{
+      const pass = prompt('กรุณากรอกรหัสเพื่อบันทึกเพลง ');
+      if(pass !== 'southhope'){ alert('รหัสไม่ถูกต้อง'); return; }
+      const title = prompt('ชื่อเพลง?');
+      if(!title) return;
+      const lyrics = editorEl.value || '';
+      // optional youtube prompt
+      const youtube = prompt('YouTube URL (ถ้ามี)') || '';
+      await addSongToFirestore(title, lyrics, youtube);
+    };
 
-    const title = prompt('ชื่อเพลง?');
-    if(!title) return;
+    document.getElementById('clear').onclick = ()=>{
+      if(confirm('ล้างข้อความใน Editor?')){ editorEl.value = ''; currentSteps = 0; updateUI(); }
+    };
 
-    const lyrics = editorEl.value || '';
-
-    const db = getDb();
-    db.songs.push({
-      id: uuidv4(),
-      title,
-      lyrics,
-      youtube:''
-    });
-
-    saveDb(db);
-    renderSongList();
-    alert('บันทึกเพลงแล้ว');
-  };
-
-  // clear
-  document.getElementById('clear').onclick = ()=>{
-    if(confirm('ล้างข้อความใน Editor?')){
-      editorEl.value = '';
-      currentSteps = 0;
-      updateUI();
+    // mobile tabs default
+    if(window.innerWidth <= 768){
+      showSection('editorSection');
+    } else {
+      document.getElementById('songListSection').classList.add('show');
+      document.getElementById('editorSection').classList.add('show');
+      document.getElementById('previewSection').classList.add('show');
     }
-  };
+    updateUI();
+  });
 
-  // mobile default view
-  if(window.innerWidth <= 768){
-    showSection('editorSection');
-  } else {
-    document.getElementById('songListSection').classList.add('show');
-    document.getElementById('editorSection').classList.add('show');
-    document.getElementById('previewSection').classList.add('show');
+  // ----- Mobile tabs -----
+  function showSection(id){
+    ['songListSection','editorSection','previewSection'].forEach(x=>{
+      const el = document.getElementById(x); if(el) el.classList.remove('show');
+    });
+    const el = document.getElementById(id); if(el) el.classList.add('show');
+    window.scrollTo(0,0);
   }
+  document.getElementById('tabList').onclick = ()=> showSection('songListSection');
+  document.getElementById('tabEditor').onclick = ()=> showSection('editorSection');
+  document.getElementById('tabPreview').onclick = ()=> showSection('previewSection');
 
-  updateUI();
-});
+  window.addEventListener('resize', ()=>{
+    if(window.innerWidth <= 768){
+      if(!document.getElementById('songListSection').classList.contains('show') &&
+         !document.getElementById('editorSection').classList.contains('show') &&
+         !document.getElementById('previewSection').classList.contains('show')){
+           showSection('editorSection');
+      }
+    } else {
+      document.getElementById('songListSection').classList.add('show');
+      document.getElementById('editorSection').classList.add('show');
+      document.getElementById('previewSection').classList.add('show');
+    }
+  });
+
 </script>
-
 </body>
 </html>
